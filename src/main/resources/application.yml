@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization-inclusion: non_null
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 10Mb
+  aop: 
+    proxy-target-class: true
+server:
+  context-path: /monitor

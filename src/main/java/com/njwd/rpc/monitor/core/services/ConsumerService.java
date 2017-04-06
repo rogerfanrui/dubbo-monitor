@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.framework.DefaultAopProxyFactory;
@@ -18,10 +22,12 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
+import com.alibaba.dubbo.common.utils.Log;
 import com.alibaba.dubbo.registry.RegistryService;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.njwd.rpc.monitor.core.domain.AutoMockConfig;
 import com.njwd.rpc.monitor.core.domain.Consumer;
 import com.njwd.rpc.monitor.core.domain.Method;
 import com.njwd.rpc.monitor.core.domain.Provider;
@@ -48,7 +54,9 @@ public class ConsumerService extends DefaultMonitorHandler implements DubboCoreS
 	
 	
 	@Autowired
-	private RegistryService registryService;
+	private MockServices mockServices;
+	@Autowired
+	private ConfigServices configServices;
 	
 	@Override
 	public void actionService(URL url) {
@@ -182,7 +190,7 @@ public class ConsumerService extends DefaultMonitorHandler implements DubboCoreS
 				
 				for(Consumer c:entry.getValue()){
 					if(c.getAppName().equals(appName)){
-						executeMock(services, appName, ip, mockParam);
+						mockServices.executeMock(services, appName, ip, mockParam,null);
 						
 						c.setMockDown(StringUtils.isNotBlank(mockParam)?true:false);
 					}
@@ -194,22 +202,79 @@ public class ConsumerService extends DefaultMonitorHandler implements DubboCoreS
 	}
 	
 	
-	private void executeMock(String services, String appName,String ip,String mockParam){
-		com.njwd.rpc.monitor.core.domain.Override or = new com.njwd.rpc.monitor.core.domain.Override();
-		or.setApplication(appName);
-		or.setEnabled(true);
-		or.setServiceName(services);
-		or.setAddress(ip);
-		//or.setGroup(groupName);
-		or.setParams("mock=" + URL.encode("force:return null"));
-		if(StringUtils.isNoneBlank(mockParam)){
-			registryService.register(or.toUrl());
-		}else{
-			registryService.unregister(or.toUrl());
+	
+	@PostConstruct
+	public void runnAutoDown(){
+		System.out.println(this);
+		//主要是为了统计一段时间的，后期扩展可以修正该段，先简单处理。
+				new Thread(new AutoDownThread(),"scanner-runnAutoDown").start(); 
+	
+	
+	
+	}
+	
+	
+	
+	class AutoDownThread implements Runnable{
+
+		@Override
+		public void run() {
+			while(true){
+				actRun();
+				try {
+					Thread.sleep(60*1000l);
+				} catch (InterruptedException e) {
+					
+				}
+			}
+		}
+	   private void actRun(){
+
+		List<AutoMockConfig> configs=	configServices.loadConfigs();
+   		for(AutoMockConfig c:configs){
+   			
+   			
+   			for(Entry<String, Set<Consumer>> entry:inMemoryServices.entrySet()){
+   				if(Tool.getInterface(entry.getKey()).equals(c.getServiceName())){
+   					
+   					for(Consumer cu:entry.getValue()){
+   						if(cu.getAppName().equals(c.getAppName())&& !cu.isMockDown()){
+   							if(c.getIp().equals(Constants.ANYHOST_VALUE)||c.getIp().equals(cu.getIp())){
+   								if(scale(cu)>=c.getErrorScale()){
+   									//执行降级
+   									mock(cu.getServiceName(), cu.getAppName(), cu.getIp(), MockServices.MOCK_UPDOWN_VALUE);
+   								}
+   							}
+   							
+   							
+   						}
+   					}
+   					
+   				}
+   			}
+   		}
+		
+	   }
+	   
+		
+		/**
+		 * 这里是针对所有METHOD进行统计，如果有必要也可以分METHOD 但是降级面向的是服务！！切记
+		 * @param c
+		 * @return
+		 */
+		private float scale(Consumer c){
+			int allFails=0;
+			int all=0;
+			for(Method d:c.getMethods()){
+				allFails +=d.getFail();
+				all +=(d.getFail()+d.getSuccess());
+			}
+			
+		  return all==0?0.0f:(allFails/all);
+			
+			
 		}
 		
 		
-		
 	}
-	
 }

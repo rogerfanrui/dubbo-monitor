@@ -106,6 +106,10 @@ $(function(){
 		        	 field: 'error',
 			         title:'error',
 			         formatter:'showError'
+		        },{
+		        	 field: 'oper',
+			         title:'operator',
+			         formatter:'showOperatorProvider'
 		        }
             ]
         
@@ -130,7 +134,17 @@ function showOperator(value,row,index){
 	 
 	
 }
-
+function showOperatorProvider(value,row,index){
+	
+	 if( row.mockDown){
+		 
+		 return `<button type="button" class="btn btn-default" data-index="${index}" role="recoveBtnProvider">恢复</button>`;
+	 }else{
+		 return `<button type="button" class="btn btn-default" data-index="${index}" role="mockDownBtnProvider">降级</button>`;
+	 }
+	 
+	
+}
 function showSuccess(value,row,index){
 	var method =row.methods;
 	var showSuccess=0;
@@ -183,7 +197,7 @@ function showAllConsumers(){
 			var appName=_row.appName;
 			var ip=_row.ip;
 			doRequest({
-				url:'recoveMock',
+				url:'consumer/recoveMock',
 				type:'POST',
 				data:{
 					services:services,
@@ -202,7 +216,7 @@ function showAllConsumers(){
 			var appName=_row.appName;
 			var ip=_row.ip;
 			doRequest({
-				url:'doMock',
+				url:'consumer/doMock',
 				type:'POST',
 				data:{
 					services:services,
@@ -229,7 +243,45 @@ function showAllProviders(){
 			return;
 		}
 		$('#ptable').bootstrapTable('load', d);
-		
+		$('button[role=recoveBtnProvider]').click(function() {
+			var _index=this.dataset.index;
+			var _row =$('#ptable').bootstrapTable('getData')[_index];
+			var services=_row.serviceName;
+			var appName=_row.appName;
+			var groupName=_row.group;
+			doRequest({
+				url:'provider/recoveMock',
+				type:'POST',
+				data:{
+					services:services,
+					appName:appName,
+					groupName:groupName
+				}
+			},function(d){
+				print('执行成功');
+				showAllProviders();
+			});
+		});
+		$('button[role=mockDownBtnProvider]').click(function() {
+			var _index=this.dataset.index;
+			var _row =$('#ptable').bootstrapTable('getData')[_index];
+			var services=_row.serviceName;
+			var appName=_row.appName;
+			var groupName=_row.group;
+			doRequest({
+				url:'provider/doMock',
+				type:'POST',
+				data:{
+					services:services,
+					appName:appName,
+					groupName:groupName
+				}
+			},function(d){
+				print('执行成功');
+				showAllProviders();
+			});
+			
+		});
 	});
 	
 	

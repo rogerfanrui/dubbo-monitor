@@ -2,6 +2,7 @@ package com.njwd.rpc.monitor.core.services.api;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -65,6 +66,10 @@ public abstract class DefaultMonitorHandler implements DubboMonitorHandler{
 	}
 	
 	
+	protected  ConcurrentMap<SKey, Map<Long,SValue >> getInvokeMonitorDatas(){
+		return inMemoryServices;
+	}
+	
 	public abstract boolean isSupportHandlerMonitor(StatisticsInfo info);
 	
 	
@@ -73,6 +78,7 @@ public abstract class DefaultMonitorHandler implements DubboMonitorHandler{
 	
 	@PostConstruct
 	public void scannerMemory(){
+		System.out.println(this);
 		//主要是为了统计一段时间的，后期扩展可以修正该段，先简单处理。
 		new Thread(new Runnable(){  
             public void run(){  
@@ -89,7 +95,11 @@ public abstract class DefaultMonitorHandler implements DubboMonitorHandler{
             			 
             			
             		}
-            		
+            		try {
+						Thread.sleep(60*1000l);
+					} catch (InterruptedException e) {
+						
+					}
             		
             	}
             	

@@ -20,7 +20,7 @@ public class Consumer extends Service {
 	@JsonIgnore
 	private URL url;
 
-	private boolean isMockDown=false;
+	
 	
 	public Consumer() {
 	}
@@ -55,14 +55,7 @@ public class Consumer extends Service {
 	
 	
 
-	public boolean isMockDown() {
-		return isMockDown;
-	}
-
-	public void setMockDown(boolean isMockDown) {
-		this.isMockDown = isMockDown;
-	}
-
+	
 	public int hashCode() {
 
 		return url.hashCode();

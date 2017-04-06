@@ -1,6 +1,16 @@
 server:
   port: 80
-
+spring:
+  redis:
+    database: 5
+    host: 115.29.78.228
+    port: 7000
+    password: clianmeng.com
+    max-active: 20
+    max-wait: 120000
+    max-idle: 20
+    min-idle: 2
+    timeout: 0
 
 logging:
   config: classpath:logback.xml

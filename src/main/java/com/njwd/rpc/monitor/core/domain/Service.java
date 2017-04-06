@@ -13,7 +13,7 @@ public class Service extends SuperBean {
 	private String appName;
 	private String serviceName;
 	private Date ctime;
-	
+	private boolean isMockDown=false;
 	private String ip;
 	private int port;
 	
@@ -65,7 +65,14 @@ public class Service extends SuperBean {
 		this.ctime = ctime;
 	}
 	
-	
+	public boolean isMockDown() {
+		return isMockDown;
+	}
+
+	public void setMockDown(boolean isMockDown) {
+		this.isMockDown = isMockDown;
+	}
+
 	
 	
 }

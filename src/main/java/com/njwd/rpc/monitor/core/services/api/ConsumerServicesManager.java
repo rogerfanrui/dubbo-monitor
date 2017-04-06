@@ -1,5 +1,6 @@
 package com.njwd.rpc.monitor.core.services.api;
 
+
 public interface ConsumerServicesManager {
 
 	/**
@@ -10,4 +11,9 @@ public interface ConsumerServicesManager {
 	 * @return
 	 */
 	public boolean mock(String services,String appName,String ip,String mockParam);
+	
+	
+	
+	
+	
 }

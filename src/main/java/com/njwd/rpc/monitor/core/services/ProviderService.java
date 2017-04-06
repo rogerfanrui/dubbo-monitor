@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.dubbo.common.Constants;
@@ -24,13 +25,17 @@ import com.njwd.rpc.monitor.core.services.api.DubboCoreServicesHandler;
 import com.njwd.rpc.monitor.core.services.api.DubboMonitorHandler;
 import com.njwd.rpc.monitor.core.services.api.DubboServiceHandler;
 import com.njwd.rpc.monitor.core.services.api.DefaultMonitorHandler;
+import com.njwd.rpc.monitor.core.services.api.ProviderServicesManager;
 import com.njwd.rpc.monitor.core.util.Tool;
 
 @Component("ProviderService")
-public class ProviderService extends DefaultMonitorHandler  implements DubboCoreServicesHandler<Provider>{
+public class ProviderService extends DefaultMonitorHandler  implements DubboCoreServicesHandler<Provider>,ProviderServicesManager{
 
 	
 	private  static ConcurrentMap<String, Set<Provider>> inMemoryServices = Maps.newConcurrentMap();
+	
+	@Autowired
+	private MockServices mockServices;
 	
 	@Override
 	public void actionService(URL url) {
@@ -136,6 +141,26 @@ public class ProviderService extends DefaultMonitorHandler  implements DubboCore
 		
 		
 		
+	}
+
+	@Override
+	public boolean mock(String services,String groupName, String mockParam) {
+		groupName = StringUtils.isBlank(groupName)?"*":groupName;
+		
+		for(Entry<String, Set<Provider>> entry:inMemoryServices.entrySet()){
+			if(Tool.getInterface(entry.getKey()).equals(services)&& Tool.getGroup(entry.getKey()).equals(groupName)){
+				
+				for(Provider c:entry.getValue()){
+					
+						mockServices.executeMock(services, mockParam,groupName);
+						
+						c.setMockDown(StringUtils.isNotBlank(mockParam)?true:false);
+					
+				}
+				
+			}
+		}
+		return true;
 	}
 	
 }

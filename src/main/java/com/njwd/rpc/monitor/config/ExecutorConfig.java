@@ -24,7 +24,7 @@ public class ExecutorConfig {
         executor.setQueueCapacity(queueCapacity);  
         executor.setThreadNamePrefix("backrunn-");  
         executor.setThreadNamePrefix("backrunn-"); 
-        
+        executor.setThreadNamePrefix("backrunn-"); 
         executor.initialize();  
         return executor;  
     }  

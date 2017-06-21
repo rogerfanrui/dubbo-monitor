@@ -23,7 +23,7 @@ public class ExecutorConfig {
         executor.setMaxPoolSize(maxPoolSize);  
         executor.setQueueCapacity(queueCapacity);  
         executor.setThreadNamePrefix("backrunn-");  
-        executor.initialize();  
+        executor.initialize();  //hi
         return executor;  
     }  
 }

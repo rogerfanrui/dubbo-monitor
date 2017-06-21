@@ -16,6 +16,7 @@ public class MonitorApplication {
 
 	
 
+	//main
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(MonitorApplication.class);
 		app.setBannerMode(Mode.OFF);

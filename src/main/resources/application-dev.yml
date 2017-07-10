@@ -1,6 +1,6 @@
 server:
   port: 80
-spring:
+spring: 
   redis:
     database: 5
     host: 115.29.78.228
@@ -16,3 +16,4 @@ logging:
   config: classpath:logback.xml
   path: /logs/njwd
   level: INFO
+  

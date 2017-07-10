@@ -14,3 +14,11 @@ spring:
     proxy-target-class: true
 server:
   context-path: /monitor
+dubbo: 
+   registryAddress: zookeeper://192.168.31.243:2181
+   registryCheck: false
+   registryTimeout: 5000
+   applicationName: njwd-dubbo-monitor
+   annotationPackage: com.njwd.rpc.monitor.core.services.dubbo
+   protocolName: dubbo
+   protocolPort: 20881

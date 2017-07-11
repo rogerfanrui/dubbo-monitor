@@ -1,0 +1,146 @@
+<h1 id="h1--markdown-">
+    <a name="欢迎使用Markdown编辑器写文章" class="reference-link"></a>
+    <span
+        class="header-link octicon octicon-link"></span>欢迎使用Markdown编辑器写文章
+</h1>
+   <p>本Markdown编辑器使用<strong>Editor.md</strong>修改而来，用它写技术文章，将会带来全新的体验哦：</p>
+<ul>
+    <li><strong>Markdown和扩展Markdown简洁的语法</strong></li>
+    <li><strong>代码块高亮</strong></li>
+    <li><strong>图片链接和图片上传</strong></li>
+    <li><strong><em>LaTex</em>数学公式</strong></li>
+    <li><strong>UML序列图和流程图</strong></li>
+    <li><strong>离线写文章</strong></li>
+    <li><strong>导入导出Markdown文件</strong></li>
+    <li><strong>丰富的快捷键</strong></li>
+</ul>
+<hr>
+<h2 id="h2-u5FEBu6377u952E"><a name="快捷键" class="reference-link"></a><span
+        class="header-link octicon octicon-link"></span>快捷键</h2>
+<ul>
+    <li>加粗 <code>Ctrl + B</code></li>
+    <li>斜体 <code>Ctrl + I</code></li>
+    <li>引用 <code>Ctrl + Q</code></li>
+    <li>插入链接 <code>Ctrl + L</code></li>
+    <li>插入代码 <code>Ctrl + K</code></li>
+    <li>插入图片 <code>Ctrl + G</code></li>
+    <li>提升标题 <code>Ctrl + H</code></li>
+    <li>有序列表 <code>Ctrl + O</code></li>
+    <li>无序列表 <code>Ctrl + U</code></li>
+    <li>横线 <code>Ctrl + R</code></li>
+    <li>撤销 <code>Ctrl + Z</code></li>
+    <li>重做 <code>Ctrl + Y</code></li>
+</ul>
+<h2 id="h2-markdown-"><a name="Markdown及扩展" class="reference-link"></a><span
+        class="header-link octicon octicon-link"></span>Markdown及扩展</h2>
+<blockquote>
+    <p>Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。 —— <a href="https://zh.wikipedia.org/wiki/Markdown"
+                                                                         target="_blank"> [ 维基百科 ]</p>
+</blockquote>
+<p>使用简单的符号标识不同的标题，将某些文字标记为<strong>粗体</strong>或者<em>斜体</em>，创建一个<a href="http://www.csdn.net">链接</a>等，详细语法参考帮助？。</p>
+<p>本编辑器支持 <strong>Markdown Extra</strong> , 　扩展了很多好用的功能。具体请参考[Github][2].</p>
+<h3 id="h3-u8868u683C"><a name="表格" class="reference-link"></a><span class="header-link octicon octicon-link"></span>表格
+</h3><p><strong>Markdown　Extra</strong>　表格语法：</p>
+<table>
+    <thead>
+    <tr>
+        <th>项目</th>
+        <th>价格</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Computer</td>
+        <td>$1600</td>
+    </tr>
+    <tr>
+        <td>Phone</td>
+        <td>$12</td>
+    </tr>
+    <tr>
+        <td>Pipe</td>
+        <td>$1</td>
+    </tr>
+    </tbody>
+</table>
+<p>可以使用冒号来定义对齐方式：</p>
+<table>
+    <thead>
+    <tr>
+        <th style="text-align:left">项目</th>
+        <th style="text-align:right">价格</th>
+        <th style="text-align:center">数量</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td style="text-align:left">Computer</td>
+        <td style="text-align:right">1600 元</td>
+        <td style="text-align:center">5</td>
+    </tr>
+    <tr>
+        <td style="text-align:left">Phone</td>
+        <td style="text-align:right">12 元</td>
+        <td style="text-align:center">12</td>
+    </tr>
+    <tr>
+        <td style="text-align:left">Pipe</td>
+        <td style="text-align:right">1 元</td>
+        <td style="text-align:center">234</td>
+    </tr>
+    </tbody>
+</table>
+<h3 id="h3-u4EE3u7801u5757"><a name="代码块" class="reference-link"></a><span
+        class="header-link octicon octicon-link"></span>代码块</h3><p>代码块语法遵循标准markdown代码，例如：</p>
+<pre><code class="lang-python">@requires_authorization
+def somefunc(param1=&#39;&#39;, param2=0):
+    &#39;&#39;&#39;A docstring&#39;&#39;&#39;
+    if param1 &gt; param2: # interesting
+        print &#39;Greater&#39;
+    return (param2 - param1 + 1) or None
+class SomeClass:
+    pass
+&gt;&gt;&gt; message = &#39;&#39;&#39;interpreter
+... prompt&#39;&#39;&#39;
+</code></pre>
+<h3 id="h3-u76EEu5F55"><a name="目录" class="reference-link"></a><span class="header-link octicon octicon-link"></span>目录
+</h3><p>用 <code>[TOC]</code>来生成目录：</p>
+<div class="markdown-toc editormd-markdown-toc">[TOC]</div><h3 id="h3-u6570u5B66u516Cu5F0F"><a name="数学公式"
+                                                                                               class="reference-link"></a><span
+        class="header-link octicon octicon-link"></span>数学公式</h3><p>使用MathJax渲染<em>LaTex</em>
+    数学公式，详见[math.stackexchange.com][1].</p>
+<ul>
+    <li>行内公式，数学公式为：$\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$。</li>
+    <li>块级公式：</li>
+</ul>
+<p class="editormd-tex"> x = \dfrac{-b \pm \sqrt{b^2 - 4ac}}{2a} </p>
+<p>更多LaTex语法请参考 [这儿][3].</p>
+<h3 id="h3-uml-"><a name="UML 图:" class="reference-link"></a><span class="header-link octicon octicon-link"></span>UML
+    图:</h3><p>可以渲染序列图：</p>
+<div class="sequence-diagram">张三->李四: 嘿，小四儿, 写博客了没?
+    Note right of 李四: 李四愣了一下，说：
+    李四-->张三: 忙得吐血，哪有时间写。
+</div><p>或者流程图：</p>
+<div class="flowchart">st=>start: 开始
+    e=>end: 结束
+    op=>operation: 我的操作
+    cond=>condition: 确认？
+
+    st->op->cond
+    cond(yes)->e
+    cond(no)->op
+</div>
+<ul>
+    <li>关于 <strong>序列图</strong> 语法，参考 [这儿][4],</li>
+    <li>关于 <strong>流程图</strong> 语法，参考 [这儿][5].</li>
+</ul>
+<h2 id="h2-u79BBu7EBFu5199u535Au5BA2"><a name="离线写博客" class="reference-link"></a><span
+        class="header-link octicon octicon-link"></span>离线写博客</h2><p>即使用户在没有网络的情况下，也可以通过本编辑器离线写文章（直接在曾经使用过的浏览器中输入<a
+        href="http://write.blog.csdn.net/mdeditor">write.blog.csdn.net/mdeditor</a>即可。<strong>Markdown编辑器</strong>使用浏览器离线存储将内容保存在本地。
+</p>
+<p>用户写文章的过程中，内容实时保存在浏览器缓存中，在用户关闭浏览器或者其它异常情况下，内容不会丢失。用户再次打开浏览器时，会显示上次用户正在编辑的没有发表的内容。</p>
+<p>文章发表后，本地缓存将被删除。</p>
+<p>用户可以选择 <i class="icon-disk"></i> 把正在写的文章保存到服务器草稿箱，即使换浏览器或者清除缓存，内容也不会丢失。</p>
+<blockquote>
+    <p><strong>注意：</strong>虽然浏览器存储大部分时候都比较可靠，但为了您的数据安全，在联网后，<strong>请务必及时发表或者保存到服务器草稿箱</strong></p>
+</blockquote>

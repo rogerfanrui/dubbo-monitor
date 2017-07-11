@@ -12,6 +12,13 @@ spring:
       max-file-size: 10Mb
   aop: 
     proxy-target-class: true
+  thymeleaf: 
+    prefix: classpath:/th/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html
+    cache: false
 server:
   context-path: /monitor
 dubbo: 

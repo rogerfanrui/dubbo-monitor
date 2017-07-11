@@ -11,7 +11,8 @@ spring:
     max-idle: 20
     min-idle: 2
     timeout: 0
-
+  thymeleaf: 
+    cache: false
 logging:
   config: classpath:logback.xml
   path: /logs/njwd

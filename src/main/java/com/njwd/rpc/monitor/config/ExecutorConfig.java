@@ -1,3 +1,4 @@
+
 package com.njwd.rpc.monitor.config;
 
 import java.util.concurrent.Executor;
@@ -23,7 +24,7 @@ public class ExecutorConfig {
         executor.setMaxPoolSize(maxPoolSize);  
         executor.setQueueCapacity(queueCapacity);  
         executor.setThreadNamePrefix("backrunn-");  
-        executor.initialize();  
+        executor.initialize();  //hi
         return executor;  
     }  
 }

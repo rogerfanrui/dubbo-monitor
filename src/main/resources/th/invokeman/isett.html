@@ -1,0 +1,90 @@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>字典管理</h1>
+	<ol class="breadcrumb">
+		<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+		<li><a href="#">服务管理</a></li>
+		<li class="active">服务设置</li>
+	</ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+	<div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+                <li ><a href="#tab_1" data-toggle="tab" aria-expanded="false" data-key="providers" data-tid="p_table">服务提供端</a></li>
+                <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" data-key="consumers" data-tid="c_table">服务消费端</a></li>
+                
+               
+        </ul>
+        <div class="tab-content">
+                <div class="tab-pane" id="tab_1">
+                       <table id="p_table"  data-showFooter="false" data-search="true"   data-detail-view="true" data-detail-formatter="showFullUrl"
+						class="table table-bordered table-striped table-hover" data:url="@{/isett/info(key='providers')}">
+						<thead>
+					        <tr>
+					            <th data-field="appName">appName</th>
+					            <th data-field="serviceName">serviceName</th>
+					            <th data-field="ctime">ctime</th>
+					            <th data-field="group">group</th>
+					            <th data-field="ip">ip</th>
+					            <th data-field="ip">port</th>
+					        </tr>
+					    </thead>
+					</table>
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+					<table id="c_table"  data-showFooter="false" data-search="true"  data-detail-view="true" data-detail-formatter="showFullUrl"
+						class="table table-bordered table-striped table-hover" data:url="@{/isett/info(key='consumers')}">
+						<thead>
+					        <tr>
+					              <th data-field="appName">appName</th>
+					              <th data-field="serviceName">serviceName</th>
+					            <th data-field="ctime">ctime</th>
+					            <th data-field="group">group</th>
+					            <th data-field="ip">ip</th>
+					        </tr>
+					    </thead>
+					</table>
+                </div>
+               
+        </div>
+</div>
+
+</section>
+
+<script type="text/javascript">
+$(function(){
+	$('.nav-tabs li a').click(function(){
+		console.log('click');
+		var _this = this;
+		var table =$('#'+_this.dataset.tid);
+
+		doRequest({
+			url : table.data("url")
+		}, function(data) {
+			table.bootstrapTable('load', data);
+		});
+	});
+	$('#p_table').bootstrapTable({
+		
+
+	});
+	
+
+	$('#c_table').bootstrapTable({
+		
+
+	});
+	$('.nav-tabs li a:eq(0)').click();
+	
+	
+});
+
+function showFullUrl(index, row){
+	 return row.metaInfo;
+}
+</script>

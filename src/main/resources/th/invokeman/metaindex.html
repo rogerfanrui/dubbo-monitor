@@ -1,0 +1,154 @@
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>字典管理</h1>
+	<ol class="breadcrumb">
+		<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+		<li><a href="#">系统管理</a></li>
+		<li class="active">字典管理</li>
+	</ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+	<div class="row">
+		<div class="col-md-6">
+
+			<!-- Profile Image -->
+			<div class="box box-primary">
+				<div class="box-body box-profile">
+					<div id="tree"></div>
+				</div>
+				<!-- /.box-body -->
+			</div>
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+		<div class="col-md-6">
+			<div class="box box-primary">
+
+
+				<!-- /.box-header -->
+				<div class="dataTables_filter" id="searchDiv">
+					<div class="btn-group">
+						<button type="button" class="btn btn-default" data-btn-type="add">新增</button>
+						<button type="button" class="btn btn-default" data-btn-type="edit">编辑</button>
+						<button type="button" class="btn btn-default"
+							data-btn-type="delete">删除</button>
+					</div>
+				</div>
+				<div class="box-body">
+					<table id="user_table"
+						class="table table-bordered table-striped table-hover">
+					</table>
+				</div>
+				<!-- /.box-body -->
+
+			</div>
+			<!-- /. box -->
+		</div>
+	</div>
+	<!-- /.row -->
+
+</section>
+
+<script>
+	var form = null;
+	$(function() {
+		//初始化form表单
+		//form=$("#dict-form").form();
+
+		initTree(0);
+		$('#user_table').bootstrapTable({
+			toolbar : "#searchDiv",
+			search : "true",
+			showColumns : "true",
+			 detailView:"true",
+	         detailFormatter:function(index, row){
+	        	 return row.metaInfo
+	         },
+			showFooter : "false",
+			data : [],
+			columns : [ {
+				field : 'appName',
+				title : 'appName'
+			}, {
+				field : 'ctime',
+				title : 'ctime'
+			}, {
+				field : 'group',
+				title : 'group'
+			}, {
+				field : 'ip',
+				title : 'ip'
+			}, {
+				field : 'port',
+				title : 'port'
+			} ]
+
+		});
+
+
+	});
+	var fdata;
+	function initTree(selectNodeId) {
+		var treeData = [];
+		doRequest({
+			url : '../meta/all',
+			async : false
+		}, function(data) {
+
+			console.log(data);
+			fdata = data;
+			$(data).each(function(i, m) {
+				for ( var sname in m) {
+					var so = {}
+					so.text = sname;
+					var smap = m[sname];
+					var scanodes = [];
+					for ( var sca in smap) {
+						var scanode = {};
+						scanode.text = sca;
+						scanode.parsname = sname;
+						scanodes.push(scanode);
+
+					}
+					so.nodes = scanodes;
+					treeData.push(so);
+
+				}
+			});
+			console.log(treeData);
+			$("#tree").treeview({
+				data : treeData,
+				showBorder : true,
+				expandIcon : "glyphicon glyphicon-stop",
+				collapseIcon : "glyphicon glyphicon-unchecked",
+				levels : 1,
+				onNodeSelected : function(event, data) {
+					var parName = data.parsname;
+					if (!parName) {
+						return;
+					}
+					var text = data.text;
+					buildTable(search(parName, text));
+				}
+			});
+			selectNodeId = selectNodeId || 0;
+			$("#tree").data('treeview').selectNode(selectNodeId);
+			$("#tree").data('treeview').expandNode(selectNodeId);
+			$("#tree").data('treeview').revealNode(selectNodeId);
+		});
+
+	}
+	function buildTable(invokers) {
+		console.log('build table');
+		console.log(invokers);
+		$('#user_table').bootstrapTable('load', invokers);
+	}
+
+	function search(parentText, cText) {
+		return fdata[parentText][cText];
+	}
+</script>

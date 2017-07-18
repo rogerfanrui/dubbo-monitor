@@ -19,11 +19,11 @@ public class MockServices {
 	public void executeMock(String services, String appName,String ip,String mockParam,String groupName){
 		
 		ip = StringUtils.isNoneBlank(ip)?ip:Constants.ANYHOST_VALUE;
-		com.njwd.rpc.monitor.core.domain.Override or = new com.njwd.rpc.monitor.core.domain.Override();
-		or.setApplication(appName);
+		com.njwd.rpc.monitor.core.domain.Oride or = new com.njwd.rpc.monitor.core.domain.Oride();
+		or.setAppName(appName);
 		or.setEnabled(true);
 		or.setServiceName(services);
-		or.setAddress(ip);
+		or.setIp(ip);
 		if(StringUtils.isNoneBlank(groupName)){
 			or.setGroup(groupName);
 		}

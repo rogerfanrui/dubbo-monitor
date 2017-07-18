@@ -13,15 +13,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-public class Consumer extends Service {
+public class Consumer extends Invoker {
 
 	private List<Method> methods;
 
-	@JsonIgnore
-	private URL url;
 
-	
-	
 	public Consumer() {
 	}
 
@@ -30,7 +26,8 @@ public class Consumer extends Service {
 		this.url = url;
 		String _methods = url.getParameter(Constants.METHODS_KEY);
 		if (StringUtils.isNotBlank(_methods)) {
-			List<Method> _methodsList = Lists.transform(Lists.newArrayList(_methods.split(",")),
+			List<Method> _methodsList = Lists.transform(
+					Lists.newArrayList(_methods.split(",")),
 					new Function<String, Method>() {
 						public Method apply(String input) {
 							return new Method(input);
@@ -52,10 +49,7 @@ public class Consumer extends Service {
 		Consumer p = (Consumer) obj;
 		return url.equals(p.getUrl());
 	}
-	
-	
 
-	
 	public int hashCode() {
 
 		return url.hashCode();

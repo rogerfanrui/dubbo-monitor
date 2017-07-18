@@ -1,5 +1,5 @@
 
-package com.njwd.rpc.monitor.core.services.dubbo;
+package com.njwd.rpc.monitor.core.dubbo;
 
 import java.util.List;
 

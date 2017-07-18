@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.njwd.rpc.monitor.web.ResponseVo;
+import com.njwd.rpc.monitor.web.R;
 
 
 @RestControllerAdvice
@@ -16,8 +16,8 @@ public class ExceptionHanler {
 	private Logger log = LoggerFactory.getLogger(ExceptionHanler.class);
 	
 	@ExceptionHandler
-    public ResponseVo handleSQLException(HttpServletRequest request, Exception ex) {  
+    public R handleSQLException(HttpServletRequest request, Exception ex) {  
 		log.error("",ex);
-		return new ResponseVo(false, 500, "操作异常！");
+		return new R(false, 500, "操作异常！");
     }
 }

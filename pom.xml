@@ -18,6 +18,9 @@
 		<java.version>1.7</java.version>
 		<fastjson.version>1.2.30</fastjson.version>
 		<mybatis-generator.version>1.3.5</mybatis-generator.version>
+		 <thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
+   		 <thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
+   		 <thymeleaf-extras-data-attribute.version>2.0.1</thymeleaf-extras-data-attribute.version>
 	</properties>
 
 	<dependencies>
@@ -36,6 +39,10 @@
          	<groupId>org.springframework.boot</groupId>  
         	 <artifactId>spring-boot-starter-thymeleaf</artifactId>  
 		</dependency> 
+		<dependency>
+		    <groupId>com.github.mxab.thymeleaf.extras</groupId>
+		    <artifactId>thymeleaf-extras-data-attribute</artifactId>
+		</dependency>
 		<dependency>  
             <groupId>org.springframework.boot</groupId>  
             <artifactId>spring-boot-autoconfigure</artifactId>  

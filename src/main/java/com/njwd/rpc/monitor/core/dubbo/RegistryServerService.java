@@ -1,4 +1,4 @@
-package com.njwd.rpc.monitor.core.services.dubbo;
+package com.njwd.rpc.monitor.core.dubbo;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +20,8 @@ import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.RegistryService;
+import com.njwd.rpc.monitor.config.SpringUtils;
+import com.njwd.rpc.monitor.core.invoker.InvokeMetaEvent;
 import com.njwd.rpc.monitor.core.services.ListenerAdapterService;
 
 @Component
@@ -46,7 +48,11 @@ public class RegistryServerService implements InitializingBean, DisposableBean,
 	
 	@Autowired
 	private ListenerAdapterService listerService;
+	
+	private Object lock = new Object();
 
+	@Autowired
+	SpringUtils springUtil;
 	/**
 	 * 这里的结构是：
 	 *   category{consumer,provider,configurators,route}
@@ -75,20 +81,24 @@ public class RegistryServerService implements InitializingBean, DisposableBean,
 		if (urls == null || urls.isEmpty()) {
 			return;
 		}
-		
-		
-		for (URL url : urls) {
-			//admin 协议忽略
-			if(url.getProtocol().equalsIgnoreCase(Constants.ADMIN_PROTOCOL)){
-				continue;
+		synchronized (lock) {
+			for (URL url : urls) {
+				//admin 协议忽略
+				if(url.getProtocol().equalsIgnoreCase(Constants.ADMIN_PROTOCOL)){
+					continue;
+				}
+				//consumer & monitorservices忽略
+				if(url.getProtocol().equals(Constants.CONSUMER) && url.getServiceInterface().equals("com.alibaba.dubbo.monitor.MonitorService")){
+					continue;
+				}
+				InvokeMetaEvent event = new InvokeMetaEvent(this, url);
+				SpringUtils.getApplicationContext().publishEvent(event);
+				//listerService.actionService(url);
+				
 			}
-			//consumer & monitorservices忽略
-			if(url.getProtocol().equals(Constants.CONSUMER) && url.getServiceInterface().equals("com.alibaba.dubbo.monitor.MonitorService")){
-				continue;
-			}
-			listerService.actionService(url);
-			
 		}
+		
+		
 		
 	}
 }

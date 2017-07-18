@@ -1,0 +1,88 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+
+
+<head th:fragment="header (title,scripts)">
+<meta charset="utf-8" />
+<title th:replace="${title}">管理中心</title>
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+</meta>
+<!--icon-->
+<link rel="shortcut icon" type="image/x-icon"
+	th:href="@{/common/favicon.ico}" media="screen" />
+<link rel="stylesheet"
+	th:href="@{/adminlte/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/libs/font-awesome/css/font-awesome.min.css}" />
+
+<!-- Ionicons -->
+<link rel="stylesheet" th:href="@{/libs/ionicons/css/ionicons.min.css}" />
+<!-- Theme style -->
+<link rel="stylesheet" th:href="@{/adminlte/dist/css/AdminLTE.min.css}" />
+
+<!-- iCheck -->
+<link rel="stylesheet"
+	th:href="@{/adminlte/plugins/bootstrap-validator/dist/css/bootstrap-validator.css}" />
+
+<!-- table and edit -->
+<link rel="stylesheet"
+	th:href="@{/libs/bootstrap-table/bootstrap-table.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/adminlte/plugins/datatables/select.bootstrap.min.css}" />
+<link rel="stylesheet" th:href="@{/adminlte/plugins/iCheck/all.css}" />
+<link rel="stylesheet"
+	th:href="@{/adminlte/plugins/datepicker/datepicker3.css}" />
+<link rel="stylesheet"
+	th:href="@{/adminlte/plugins/select2/select2.min.css}" />
+<!-- treeview -->
+<link rel="stylesheet"
+	th:href="@{/adminlte/plugins/bootstrap-treeview/bootstrap-treeview.min.css}" />
+<!-- Theme style -->
+<link rel="stylesheet"
+	th:href="@{/adminlte/dist/css/skins/_all-skins.css}" />
+
+
+<script th:src="@{/adminlte/plugins/jQuery/jquery-2.2.3.min.js}"></script>
+<!-- Bootstrap 3.3.6 -->
+<script th:src="@{/adminlte/bootstrap/js/bootstrap.min.js}"></script>
+<!-- iCheck -->
+<script th:src="@{/adminlte/plugins/iCheck/icheck.min.js}"></script>
+<!-- bootstrap-validator-->
+<script
+	th:src="@{/adminlte/plugins/bootstrap-validator/dist/js/bootstrap-validator.js}"></script>
+
+
+
+<script th:src="@{/libs/json/json2.js}"></script>
+<script th:src="@{/adminlte/plugins/fastclick/fastclick.js}"></script>
+<script th:src="@{/adminlte/dist/js/app.min.js}"></script>
+
+<!-- dataTable -->
+<script th:src="@{/libs/bootstrap-table/bootstrap-table.min.js}"></script>
+<script
+	th:src="@{/libs/bootstrap-table/bootstrap-table-zh-CN.min.js}"></script>
+
+<!-- form -->
+<script th:src="@{/adminlte/plugins/datepicker/bootstrap-datepicker.js}"></script>
+<!-- treeview -->
+<script
+	th:src="@{/adminlte/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
+
+
+<!--select2-->
+<script th:src="@{/adminlte/plugins/select2/select2.full.min.js}"></script>
+
+
+<script th:src="@{/common/base.js}"></script>
+<script th:src="@{/common/common.js}"></script>
+ <th:block th:replace="${scripts}" />
+
+</head>
+</body>
+</html>
+

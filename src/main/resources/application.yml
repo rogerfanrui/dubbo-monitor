@@ -15,7 +15,7 @@ spring:
   thymeleaf: 
     prefix: classpath:/th/
     suffix: .html
-    mode: HTML5
+    mode: HTML
     encoding: UTF-8
     content-type: text/html
     cache: false
@@ -26,6 +26,6 @@ dubbo:
    registryCheck: false
    registryTimeout: 5000
    applicationName: njwd-dubbo-monitor
-   annotationPackage: com.njwd.rpc.monitor.core.services.dubbo
+   annotationPackage: com.njwd.rpc.monitor.core.dubbo
    protocolName: dubbo
    protocolPort: 20881

@@ -1,0 +1,115 @@
+<script th:src="@{/libs/echarts/echarts.min.js}"></script>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>服务调用关系</h1>
+	<ol class="breadcrumb">
+		<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+		<li><a href="#">服务管理</a></li>
+		<li class="active">调用关系</li>
+	</ol>
+</section>
+ 
+<!-- Main content -->
+<section class="content">
+<div class="row">
+<div class="col-md-8">
+<div id="content_main" style="margin-left:10px;height:800px;width:1000px"></div>
+</div>
+<div class="col-md-4">
+
+</div>
+</div>
+
+</section>
+
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('content_main'));
+//指定图表的配置项和数据
+option={
+	title: {
+		text: 'njwd：服务调用关系图',
+		subtext: 'From: www.njwd.com',
+		x: 'left',
+		y: 'bottom'
+	},
+	tooltip: {
+		show: true,
+		formatter: function(params){
+			var _data=params.data;
+			if(_data.ip){
+				return _data.ip+":"+_data.port;
+			}else if (_data.services &&　_data.services.length>0){
+				var html='';
+				for(var i of  _data.services ){
+					html +='<p>'+i+"</p>";
+					
+				}
+				return html;
+			}
+		}
+	},
+	series: [{
+		type: 'graph',
+		layout: 'circular',
+		draggable: false,
+		roam: true,
+		nodeScaleRatio: 1,
+		force: {
+			layoutAnimation: true,
+			gravity: 0.3,
+			edgeLength: 800,
+			//连线的长度repulsion: 500//子节点之间的间距
+		},
+		itemStyle: {
+			normal: {
+				
+			}
+		},
+		symbol: "rect",
+		label: {
+			normal: {
+				position: 'inside',
+				show: true
+			}
+		},
+		focusNodeAdjacency: true,
+		symbolSize: [120,50],
+		 edgeSymbol: ['circle', 'arrow'],
+         edgeSymbolSize: [4, 10],
+         edgeLabel: {
+             normal: {
+                 textStyle: {
+                     fontSize: 20
+                 }
+             }
+         },
+		lineStyle: {
+			normal: {
+				width: 0.5,
+				curveness: 0.3,
+				opacity: 0.7
+			}
+		},
+		data: [],
+		links: []
+	}]
+}
+$(function(){
+	
+	doRequest({
+		url : '../relat/datas',
+		async : false
+	}, function(data) {
+		option.series[0].data=data.nodes;
+		option.series[0].links=data.lines;
+		console.log(option);
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+	});
+});
+
+
+
+
+
+</script>

@@ -1,4 +1,4 @@
-package com.njwd.rpc.monitor.web.controller;
+package com.njwd.rpc.monitor.web.controller.serman;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.njwd.rpc.monitor.core.domain.inrelation.InvokerRealationDomain;
-import com.njwd.rpc.monitor.core.invoker.InvokerRealtionServices;
+import com.njwd.rpc.monitor.core.meta.InvokerRealtionServices;
 import com.njwd.rpc.monitor.web.R;
 
 @Controller

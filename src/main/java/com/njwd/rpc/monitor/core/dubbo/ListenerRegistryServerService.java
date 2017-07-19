@@ -21,14 +21,14 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.RegistryService;
 import com.njwd.rpc.monitor.config.SpringUtils;
-import com.njwd.rpc.monitor.core.invoker.InvokeMetaEvent;
+import com.njwd.rpc.monitor.core.meta.InvokeMetaEvent;
 import com.njwd.rpc.monitor.core.services.ListenerAdapterService;
 
 @Component
-public class RegistryServerService implements InitializingBean, DisposableBean,
+public class ListenerRegistryServerService implements InitializingBean, DisposableBean,
 		NotifyListener {
 
-	private Logger log = LoggerFactory.getLogger(RegistryServerService.class);
+	private Logger log = LoggerFactory.getLogger(ListenerRegistryServerService.class);
 
 	private static final URL SUBSCRIBE = new URL(Constants.ADMIN_PROTOCOL,
 			NetUtils.getLocalHost(), 0, "", Constants.INTERFACE_KEY,

@@ -10,12 +10,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
 @Configuration
-@EnableAsync  
 public class ExecutorConfig {
 
     private int corePoolSize = 2;  
     private int maxPoolSize = 5;  
-    private int queueCapacity = 1000;  
+    private int queueCapacity = 10000;  
   
     @Bean
     public Executor mySimpleAsync() {  
@@ -23,7 +22,7 @@ public class ExecutorConfig {
         executor.setCorePoolSize(corePoolSize);  
         executor.setMaxPoolSize(maxPoolSize);  
         executor.setQueueCapacity(queueCapacity);  
-        executor.setThreadNamePrefix("backrunn-");  
+        executor.setThreadNamePrefix("monitor-Queue-");  
         executor.initialize();  //hi
         return executor;  
     }  

@@ -9,10 +9,12 @@ import org.springframework.boot.Banner.Mode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @ComponentScan({ "com.njwd.rpc.monitor.**" })
 @EnableAutoConfiguration
+@EnableAsync  
 public class MonitorApplication {
 
 	

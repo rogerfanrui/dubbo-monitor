@@ -1,4 +1,4 @@
-package com.njwd.rpc.monitor.core.invoker;
+package com.njwd.rpc.monitor.core.meta;
 
 import java.util.List;
 import java.util.Map;

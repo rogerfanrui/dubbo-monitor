@@ -1,4 +1,4 @@
-package com.njwd.rpc.monitor.core.invoker;
+package com.njwd.rpc.monitor.core.meta;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

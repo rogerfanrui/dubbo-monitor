@@ -1,4 +1,4 @@
-package com.njwd.rpc.monitor.core.invoker;
+package com.njwd.rpc.monitor.core.meta;
 
 import java.util.Iterator;
 import java.util.List;
@@ -28,9 +28,9 @@ public class InvokerRealtionServices implements ApplicationListener<InvokeMetaEv
 	private Logger log = LoggerFactory.getLogger(InvokerRealtionServices.class);
 	private InvokerRealationDomain data = new InvokerRealationDomain(); 
 	
-	private Set<Provider> providers = Sets.newHashSet();
+	private Set<Provider> providers = Sets.newConcurrentHashSet();
 
-	private Set<Consumer> consumer = Sets.newHashSet();
+	private Set<Consumer> consumer = Sets.newConcurrentHashSet();
 	
 	@Override
 	public void onApplicationEvent(InvokeMetaEvent event) {

@@ -41,6 +41,8 @@ public class StatisticsInfo extends SuperBean {
 	private int port;
 	
 	private String ip;
+	
+	private boolean isComsumer;
 
 	public StatisticsInfo(URL url) {
 		this.url = url;
@@ -70,6 +72,7 @@ public class StatisticsInfo extends SuperBean {
 		this.elapsed=url.getParameter(MonitorService.ELAPSED,0);
 		this.port=url.getPort();
 		this.ip=url.getIp();
+		isComsumer = url.hasParameter(MonitorService.PROVIDER);
 	}
 	public StatisticsInfo(){}
 	
@@ -78,6 +81,13 @@ public class StatisticsInfo extends SuperBean {
 		return new String[]{sa[0],sa.length>1?sa[1]:"0"};
 	}
 	
+	
+	public boolean isComsumer() {
+		return isComsumer;
+	}
+	public void setComsumer(boolean isComsumer) {
+		this.isComsumer = isComsumer;
+	}
 	public URL getUrl() {
 		return url;
 	}

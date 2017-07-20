@@ -1,4 +1,4 @@
-<script th:src="@{/libs/echarts/echarts.min.js}"></script>
+
 <!-- Content Header (Page header) -->
 <section class="content-header">
 	<h1>服务调用关系</h1>
@@ -40,8 +40,8 @@ option={
 				return _data.ip+":"+_data.port;
 			}else if (_data.services &&　_data.services.length>0){
 				var html='';
-				for(var i of  _data.services ){
-					html +='<p>'+i+"</p>";
+				for(var i in  _data.services ){
+					html +='<p>'+_data.services[i]+"</p>";
 					
 				}
 				return html;

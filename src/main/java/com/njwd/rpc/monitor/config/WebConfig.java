@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-	@Value("sweager.enable")
+	@Value("${sweager.enable}")
 	private boolean sweagerEnabel=false;
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {

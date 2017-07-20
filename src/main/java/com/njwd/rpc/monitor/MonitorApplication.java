@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @ComponentScan({ "com.njwd.rpc.monitor.**" })
 @EnableAutoConfiguration
-@EnableWebMvc
 public class MonitorApplication {
 
 	

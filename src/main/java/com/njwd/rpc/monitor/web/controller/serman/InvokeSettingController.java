@@ -32,6 +32,6 @@ public class InvokeSettingController {
 	public R<Set<Invoker>> all(@RequestParam String key){
 		Set<Invoker> result =	(Set<Invoker> )invokerRealtionServices.findInvokers(key);
 		
-		return R.getSuccessResponse(result);
+		return R.ok(result);
 	}
 }

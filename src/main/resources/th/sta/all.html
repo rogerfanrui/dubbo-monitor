@@ -1,7 +1,7 @@
 
 
 <section class="content-header">
-	<h1>字典管理</h1>
+	<h1>全量统计</h1>
 	<ol class="breadcrumb">
 		<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
 		<li><a href="#">服务管理</a></li>
@@ -10,58 +10,213 @@
 </section>
 
 <!-- Main content -->
-<section class="content" style="padding :10px;">
-	
-	<div class="row" >
-		<div class="col-xs-12">
-			<div class="box">
-				<div class="dataTables_filter" id="searchDiv">
-				 <div class="col-md-10">
+<section class="content" style="padding: 10px;">
+	<div class="box box-default">
+		<div class="box-header with-border">
+			<h3 class="box-title">检索</h3>
+
+		</div>
+		<div class="box-body">
+			<div class="row">
+
+				<div class="col-md-10">
 					<div class="form-group">
-					
-					<select id="editor-area-theme-select" class="form-control select2" multiple="multiple">
-                                <option selected="selected" value="">--全部--</option>
-                                <option th:each="s : ${services}"   th:value="${s}" th:text="${s}">com.xxx</option>
-                            </select>
-                     </div>
+						<select id="editor-area-theme-select" class="form-control select2"
+							multiple="multiple" data-placeholder="全部" style="width: 100%;">
+
+							<option th:each="s : ${services}" th:value="${s}" th:text="${s}">com.xxx</option>
+						</select>
+					</div>
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="btn btn-primary" 	data-btn-type="search">查询</button>
+					<button type="button" class="btn btn-primary"
+						data-btn-type="search" id="queryBtn">查询</button>
 				</div>
-				</div>
-				<div class="tab-content">
-					<div class="tab-pane" id="tab_1">
-						<table id="p_table" data-showFooter="false" data-search="true"
-							data-detail-view="true" data-detail-formatter="showFullUrl"
-							class="table table-bordered table-striped table-hover"
-							data:url="@{/isett/info(key='providers')}">
-							<thead>
-								<tr>
-									<th data-field="appName">appName</th>
-									<th data-field="serviceName">serviceName</th>
-									<th data-field="ctime">ctime</th>
-									<th data-field="group">group</th>
-									<th data-field="ip">ip</th>
-									<th data-field="ip">port</th>
-								</tr>
-							</thead>
-						</table>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="box box-danger">
+		<div class="box-body">
+			<div class="row">
+
+				<div class="col-md-12">
+
+					<div class="tab-content">
+						
+							<table id="p_table" data-showFooter="false" data-search="false" data-page-size="10" data-page-number="1" data-pagination="true">
+								<thead>
+									<tr>
+										<th data-field="servicesName">服务名称</th>
+										<th data-field="comSuccessCount">消费端成功总数</th>
+										<th data-field="comErrorCount">消费端失败总数</th>
+										<th data-field="comElapsed">消费端总耗时</th>
+										<th data-field="proSuccessCount">提供端成功总数</th>
+										<th data-field="proErrorCount">提供端失败总数</th>
+										<th data-field="proElapsed">提供端总耗时</th>
+									</tr>
+								</thead>
+							</table>
 					</div>
-
-
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="row"></div>
+	<div class="box box-danger">
+	
+		<div class="box-body">
+			<div class="row">
+
+				<div class="col-md-12">
+
+					<div id="content_main" style="width:100%;height:200px;"></div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
 
 </section>
 
 <script type="text/javascript">
 
-$(function(){
-	
-	  $(".select2").select2();
-});
+	$(function() {
+		var myChart = echarts.init(document.getElementById('content_main'));
+		var all_datas = null;
+		$('#queryBtn').click(function() {
+			var strtext = $('#editor-area-theme-select').select2('val');
+			//查詢所有
+			var queryArray = [];
+			if (!strtext) {
+				$('#editor-area-theme-select option').each(function(i, n) {
+					queryArray.push($(n).attr("value"));
+				});
+			} else {
+				queryArray = strtext;
+			}
+			var datas = [];
+			$(all_datas).each(function(i, n) {
+				for ( var ii in queryArray) {
+					if (n["servicesName"] == queryArray[ii]) {
+						datas.push(n);
+					}
+				}
+			});
+			$('#p_table').bootstrapTable('load', datas);
+			transformImage(datas);
+			
+		});
 
+		$('#p_table').bootstrapTable({});
+
+		doRequest({
+			url : '../sta/all/list',
+			isbody : true,
+			data : JSON.stringify(getAllServicesValue()),
+			type : 'POST'
+		}, function(data) {
+			console.log(data);
+			all_datas = data;
+			$('#p_table').bootstrapTable('load', data);
+			transformImage(all_datas);
+			
+		});
+
+		$(".content .select2").select2();
+		
+		function transformImage(all_datas){
+			$('#content_main').css("height",(60*all_datas.length+60)+"px");
+			var imageData=getImageDatas(all_datas);
+			console.log(imageData);
+			option.yAxis[0].data=imageData.namesArray;
+			option.series[0].data=imageData.comCount;
+			option.series[1].data=imageData.proCount;
+			myChart.setOption(option);
+			myChart.resize();
+		}
+		function getImageDatas(datas){
+			var namesArray=[];
+			var comCount=[];
+			var proCount=[];
+			for(var i in datas){
+				namesArray.push(datas[i]["servicesName"]);
+				comCount.push(datas[i]["comSuccessCount"]);
+				proCount.push(datas[i]["proSuccessCount"]);
+			}
+			return {
+				namesArray:namesArray,
+				comCount:comCount,
+				proCount:proCount
+			};
+		}
+		
+		function getAllServicesValue() {
+			var queryArray = [];
+			$('#editor-area-theme-select option').each(function(i, n) {
+				queryArray.push($(n).attr("value"));
+			});
+			return queryArray;
+
+		}
+		
+		var option = {
+			    tooltip : {
+			        trigger: 'axis',
+			        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+			            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+			        }
+			    },
+			    grid:{
+	                x:200,
+	                x2:5,
+	                y2:20,
+
+	            },
+			    legend: {
+			        data:[ 'comsumer', 'provider']
+			    },
+			    toolbox: {
+			        show : true,
+			        feature : {
+			            saveAsImage : {show: true}
+			        }
+			    },
+			    calculable : true,
+			    xAxis : [
+			        {
+			            type : 'value'
+			        }
+			    ],
+			    yAxis : [
+			        {
+			            type : 'category',
+			            axisTick : {show: false},
+			            data : ['com.njwd.rpc.api.SmsServices','com.njwd.rpc.api.UserSimpleSerivices']
+			        }
+			    ],
+			    series : [
+
+			        {
+			            name:'comsumer',
+			            type:'bar',
+			            itemStyle: {normal: {
+			                label : {show: true}
+			            }},
+			            data:[0, 5]
+			        },
+			        {
+			            name:'provider',
+			            type:'bar',
+			            itemStyle: {normal: {
+			                label : {show: true}
+			            }},
+			            data:[10, 15]
+			        }
+			    ]
+			};
+	});
+
+	
 </script>

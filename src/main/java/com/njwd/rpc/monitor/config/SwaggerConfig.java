@@ -18,7 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 	
 	@Bean
-	public Docket petApi(@Value("sweager.enable") boolean sweagerEnabel) {
+	public Docket petApi(@Value("${sweager.enable}") boolean sweagerEnabel) {
 		if(sweagerEnabel){
 			return  new Docket(DocumentationType.SWAGGER_2)
 	        .apiInfo(apiInfo())

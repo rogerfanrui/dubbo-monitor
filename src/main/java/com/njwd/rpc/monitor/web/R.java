@@ -49,16 +49,16 @@ public class R<T> implements Serializable {
     }
 
 
-    public static R getSuccessResponse(){
+    public static R ok(){
         return new R(true, 200, null);
     }
-    public static <T> R<T> getSuccessResponse(T obj){
+    public static <T> R<T> ok(T obj){
         return new R<T>(obj);
     }
-    public static <T> R<T> getSuccessResponse(T obj,String msg){
+    public static <T> R<T> ok(T obj,String msg){
         return new R<T>(true,200,msg,obj);
     }
-    public static <T> R<T> getSuccessResponse(long totalProperty,T obj){
+    public static <T> R<T> ok(long totalProperty,T obj){
         return new R (totalProperty,obj);
     }
     public R(T obj) {

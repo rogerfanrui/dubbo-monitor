@@ -27,7 +27,7 @@ public class InvokeRelationController {
 	@RequestMapping("/datas")
 	@ResponseBody
 	public R<InvokerRealationDomain> getDatas(){
-		return R.getSuccessResponse(invokerRealtionServices.getReleationData());
+		return R.ok(invokerRealtionServices.getReleationData());
 	}
 	
 	

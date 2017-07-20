@@ -5,11 +5,11 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
+import com.google.common.collect.Sets;
 import com.njwd.rpc.monitor.core.domain.StatisticsInfo;
 import com.njwd.rpc.monitor.core.monitor.domain.StaAll;
 
@@ -27,6 +27,7 @@ public class StaAllServices  implements ApplicationListener<MonitorEvent>{
 		StatisticsInfo sinfo =event.getSobj();
 		synchronized (pool.intern(sinfo.getService())) {
 			StaAll sta =	get(event.getSobj().getService());
+			sta.setServicesName(event.getSobj().getService());
 			if(sinfo.isComsumer()){
 				sta.setComElapsed(sta.getComElapsed()+sinfo.getElapsed());
 				sta.setComErrorCount(sta.getComErrorCount()+sinfo.getError());
@@ -46,6 +47,28 @@ public class StaAllServices  implements ApplicationListener<MonitorEvent>{
 	
 	public Set<String> getStaServices(){
 		return redisTemplate.keys("sum_*");
+	}
+	
+	/**
+	 * 设立设计的失误 应该采用map这种格式存储
+	 * 否则会导致N+1的查询
+	 * @param key
+	 * @return
+	 */
+	public Set<StaAll> selectInfosByKeys(final Set<String>  key){
+		
+		Set<StaAll> sets = Sets.newLinkedHashSet();
+		if(key == null|| key.isEmpty()){
+			return sets;
+		}
+		for(String k:key){
+			StaAll result =this.redisTemplate.opsForValue().get("sum_"+k);
+			if(result !=null){
+				sets.add(result);
+			}
+			
+		}
+		return sets;
 	}
 	
 	private String key(String serviceName){

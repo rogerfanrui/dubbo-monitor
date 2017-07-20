@@ -17,6 +17,7 @@ function doRequest(param,callback){
 		type:type,
 		async:param.async||true,
 		data:param.data||"",
+		contentType: param.isbody?"application/json; charset=utf-8":"application/x-www-form-urlencoded;charset=UTF-8", 
 		timeout:5000,
 		dataType:'json', 
 		error:function(){

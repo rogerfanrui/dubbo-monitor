@@ -10,6 +10,17 @@ public class StaAll {
 	private Long proErrorCount = 0l;
 	private Double proElapsed = 0.0d;
 
+	private String servicesName;
+	
+	
+
+	public String getServicesName() {
+		return servicesName;
+	}
+
+	public void setServicesName(String servicesName) {
+		this.servicesName = servicesName;
+	}
 
 	public Long getComSuccessCount() {
 		return comSuccessCount;

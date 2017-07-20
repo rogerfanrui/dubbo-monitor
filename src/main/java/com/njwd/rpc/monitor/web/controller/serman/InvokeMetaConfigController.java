@@ -41,6 +41,6 @@ public class InvokeMetaConfigController {
 		if(result == null){
 			result = Maps.newHashMap();
 		}
-		return R.getSuccessResponse(result);
+		return R.ok(result);
 	}
 }

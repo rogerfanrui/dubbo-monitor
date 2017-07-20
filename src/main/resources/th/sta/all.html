@@ -1,0 +1,67 @@
+
+
+<section class="content-header">
+	<h1>字典管理</h1>
+	<ol class="breadcrumb">
+		<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+		<li><a href="#">服务管理</a></li>
+		<li class="active">全量统计</li>
+	</ol>
+</section>
+
+<!-- Main content -->
+<section class="content" style="padding :10px;">
+	
+	<div class="row" >
+		<div class="col-xs-12">
+			<div class="box">
+				<div class="dataTables_filter" id="searchDiv">
+				 <div class="col-md-10">
+					<div class="form-group">
+					
+					<select id="editor-area-theme-select" class="form-control select2" multiple="multiple">
+                                <option selected="selected" value="">--全部--</option>
+                                <option th:each="s : ${services}"   th:value="${s}" th:text="${s}">com.xxx</option>
+                            </select>
+                     </div>
+				</div>
+				<div class="col-md-2">
+					<button type="button" class="btn btn-primary" 	data-btn-type="search">查询</button>
+				</div>
+				</div>
+				<div class="tab-content">
+					<div class="tab-pane" id="tab_1">
+						<table id="p_table" data-showFooter="false" data-search="true"
+							data-detail-view="true" data-detail-formatter="showFullUrl"
+							class="table table-bordered table-striped table-hover"
+							data:url="@{/isett/info(key='providers')}">
+							<thead>
+								<tr>
+									<th data-field="appName">appName</th>
+									<th data-field="serviceName">serviceName</th>
+									<th data-field="ctime">ctime</th>
+									<th data-field="group">group</th>
+									<th data-field="ip">ip</th>
+									<th data-field="ip">port</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row"></div>
+
+</section>
+
+<script type="text/javascript">
+
+$(function(){
+	
+	  $(".select2").select2();
+});
+
+</script>

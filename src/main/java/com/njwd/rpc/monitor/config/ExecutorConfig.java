@@ -10,6 +10,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 
 @Configuration
+@EnableAsync  
 public class ExecutorConfig {
 
     private int corePoolSize = 2;  

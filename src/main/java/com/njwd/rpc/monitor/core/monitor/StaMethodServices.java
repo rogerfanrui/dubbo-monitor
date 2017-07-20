@@ -30,7 +30,6 @@ public class StaMethodServices  implements ApplicationListener<MonitorEvent>{
 	
 	private Interner<String> pool = Interners.newWeakInterner();
 	@Override
-	@Async
 	public void onApplicationEvent(MonitorEvent event) {
 		StatisticsInfo sinfo =event.getSobj();
 		

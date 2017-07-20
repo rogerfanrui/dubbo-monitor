@@ -1,5 +1,7 @@
 package com.njwd.rpc.monitor.core.monitor;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,7 +22,6 @@ public class StaAllServices  implements ApplicationListener<MonitorEvent>{
 	private Interner<String> pool = Interners.newWeakInterner();
 	
 	
-	@Async
 	@Override
 	public void onApplicationEvent(MonitorEvent event) {
 		StatisticsInfo sinfo =event.getSobj();
@@ -41,6 +42,10 @@ public class StaAllServices  implements ApplicationListener<MonitorEvent>{
 		
 		
 		
+	}
+	
+	public Set<String> getStaServices(){
+		return redisTemplate.keys("sum_*");
 	}
 	
 	private String key(String serviceName){

@@ -29,7 +29,6 @@ public class StaInvokerServices  implements ApplicationListener<MonitorEvent>{
 	
 	private Interner<String> pool = Interners.newWeakInterner();
 	@Override
-	@Async
 	public void onApplicationEvent(MonitorEvent event) {
 		StatisticsInfo sinfo =event.getSobj();
 		
@@ -77,6 +76,7 @@ public class StaInvokerServices  implements ApplicationListener<MonitorEvent>{
 			}
 			cache.put(key, _result);
 		} else if (!_result.getScore().equals(soce)){
+			//这里相当于切换KEY
 			_result =cacheAdd(info, soce, type, key);
 		}
 		return _result;

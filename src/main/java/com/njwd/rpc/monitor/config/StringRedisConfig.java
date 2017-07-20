@@ -41,7 +41,7 @@ public class StringRedisConfig extends CachingConfigurerSupport {
 	}
 
 	@Bean
-	RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory rcf) {
+	RedisTemplate<String, ? extends Object> redisTemplate(RedisConnectionFactory rcf) {
 
 		Jackson2JsonRedisSerializer serializer=getJacksonRedisSeri();
 

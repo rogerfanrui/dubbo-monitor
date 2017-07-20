@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @ComponentScan({ "com.njwd.rpc.monitor.**" })
 @EnableAutoConfiguration
-@EnableAsync  
 public class MonitorApplication {
 
 	

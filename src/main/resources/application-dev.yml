@@ -17,4 +17,5 @@ logging:
   config: classpath:logback.xml
   path: /logs/njwd
   level: INFO
-  
+sweager : 
+  enable: true

@@ -29,3 +29,5 @@ dubbo:
    annotationPackage: com.njwd.rpc.monitor.core.dubbo
    protocolName: dubbo
    protocolPort: 20881
+sweager : 
+  enable: false

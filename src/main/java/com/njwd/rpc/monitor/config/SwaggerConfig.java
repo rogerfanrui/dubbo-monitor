@@ -1,5 +1,6 @@
 package com.njwd.rpc.monitor.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,14 +16,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig {
+	
 	@Bean
-	public Docket petApi() {
-		return  new Docket(DocumentationType.SWAGGER_2)
-        .apiInfo(apiInfo())
-        .select()
-        .apis(RequestHandlerSelectors.basePackage("com.njwd.rpc.monitor.web.controller"))
-        .paths(PathSelectors.any())
-        .build();
+	public Docket petApi(@Value("sweager.enable") boolean sweagerEnabel) {
+		if(sweagerEnabel){
+			return  new Docket(DocumentationType.SWAGGER_2)
+	        .apiInfo(apiInfo())
+	        .select()
+	        .apis(RequestHandlerSelectors.basePackage("com.njwd.rpc.monitor.web.controller"))
+	        .paths(PathSelectors.any())
+	        .build();
+		}else{
+			return  new Docket(DocumentationType.SWAGGER_2);
+		}
+		
 
 
 	}

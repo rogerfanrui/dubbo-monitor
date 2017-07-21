@@ -21,10 +21,10 @@ function doRequest(param,callback){
 		timeout:5000,
 		dataType:'json', 
 		error:function(){
-			print('交互错误');
+			alalert.error('交互错误');
 		},success:function(data){
 			if(!data.success){
-				print(data.msg||'交互错误');
+				alalert.error(data.msg||'交互错误');
 			}else{
 				callback(data.data);
 			}

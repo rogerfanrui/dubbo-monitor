@@ -12,7 +12,19 @@ public class StaAll {
 
 	private String servicesName;
 	
+	private Double score;
 	
+	
+	
+	
+
+	public Double getScore() {
+		return score;
+	}
+
+	public void setScore(Double score) {
+		this.score = score;
+	}
 
 	public String getServicesName() {
 		return servicesName;

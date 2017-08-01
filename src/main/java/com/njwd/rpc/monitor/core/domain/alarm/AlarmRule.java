@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.njwd.rpc.monitor.core.domain.Invoker;
 
 
@@ -27,6 +28,16 @@ public class AlarmRule {
 	@NotNull
 	private Double spercent;
 	
+	@JsonIgnore
+	private Double curSpencent;
+	
+	
+	public Double getCurSpencent() {
+		return curSpencent;
+	}
+	public void setCurSpencent(Double curSpencent) {
+		this.curSpencent = curSpencent;
+	}
 	public String getUserName() {
 		return userName;
 	}

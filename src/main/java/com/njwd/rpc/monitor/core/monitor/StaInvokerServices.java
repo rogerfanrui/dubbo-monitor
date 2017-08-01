@@ -7,7 +7,9 @@ import java.util.concurrent.Executor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Interner;
@@ -20,7 +22,7 @@ import com.njwd.rpc.monitor.core.monitor.domain.StaInvoker;
 import com.njwd.rpc.monitor.core.monitor.util.ScoreUtil;
 
 @Service
-public class StaInvokerServices  implements ApplicationListener<MonitorEvent>{
+public class StaInvokerServices  {
 
 	private static int min=1;
 	private static int hour=2;
@@ -33,8 +35,9 @@ public class StaInvokerServices  implements ApplicationListener<MonitorEvent>{
 	private Map<String, StaInvoker> cache = Maps.newConcurrentMap();
 	
 	private Interner<String> pool = Interners.newWeakInterner();
-	@Override
-	public void onApplicationEvent(MonitorEvent event) {
+	@Async
+	@EventListener
+	public void handelrMonitorEvent(MonitorEvent event) {
 		StatisticsInfo sinfo =event.getSobj();
 		
 		

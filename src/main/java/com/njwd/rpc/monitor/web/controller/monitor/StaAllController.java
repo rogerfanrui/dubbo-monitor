@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.njwd.rpc.monitor.core.monitor.StaAllServices;
+import com.njwd.rpc.monitor.core.monitor.StaTotalServices;
 import com.njwd.rpc.monitor.core.monitor.domain.StaAll;
 import com.njwd.rpc.monitor.web.R;
 
@@ -25,7 +25,7 @@ import com.njwd.rpc.monitor.web.R;
 public class StaAllController {
 
 	@Autowired
-	StaAllServices staAllServices;
+	StaTotalServices staAllServices;
 	@RequestMapping("/index")
 	public ModelAndView index(ModelAndView view){
 		Collection<String> sets =staAllServices.getStaServices();

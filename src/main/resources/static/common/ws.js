@@ -27,7 +27,7 @@ function StompWSClient(path){
             
         },function(){
         	console.log("disconnection");
-        	alalert.warn("连接websocket失败，请检查服务器endpoint配置");
+        	alalert.warn("连接websocket失败，请检查服务器当前状态");
         	_this.isConnection=false;
         });
     }();

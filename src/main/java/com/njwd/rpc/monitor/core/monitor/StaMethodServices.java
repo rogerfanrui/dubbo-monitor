@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import com.njwd.rpc.monitor.core.monitor.domain.StaMethod;
 import com.njwd.rpc.monitor.core.monitor.util.ScoreUtil;
 
 @Service
-public class StaMethodServices  implements ApplicationListener<MonitorEvent>{
+public class StaMethodServices  {
 
 	private static int min=1;
 	private static int hour=2;
@@ -29,8 +30,9 @@ public class StaMethodServices  implements ApplicationListener<MonitorEvent>{
 	private Map<String, StaMethod> cache = Maps.newConcurrentMap();
 	
 	private Interner<String> pool = Interners.newWeakInterner();
-	@Override
-	public void onApplicationEvent(MonitorEvent event) {
+	@Async
+	@EventListener
+	public void handelrMonitorEvent(MonitorEvent event) {
 		StatisticsInfo sinfo =event.getSobj();
 		
 		

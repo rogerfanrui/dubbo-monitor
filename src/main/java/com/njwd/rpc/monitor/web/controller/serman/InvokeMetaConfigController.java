@@ -33,7 +33,7 @@ public class InvokeMetaConfigController {
 		return "invokeman/metaindex";
 	}
 	
-	@ApiOperation(value="获取服务配置列表", notes="")
+	@ApiOperation(value="获取服务配置列表")
 	@RequestMapping(value="/all",method=RequestMethod.GET)
 	@ResponseBody
 	public R<Map<String, Map<String, List<Invoker>>>> all(){

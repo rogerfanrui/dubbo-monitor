@@ -2,6 +2,7 @@ package com.njwd.rpc.monitor.core.dubbo;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
+import com.njwd.rpc.monitor.core.domain.CMocking;
 import com.njwd.rpc.monitor.core.domain.Consumer;
 import com.njwd.rpc.monitor.core.domain.Empty;
 import com.njwd.rpc.monitor.core.domain.Oride;
@@ -24,6 +25,8 @@ public class DubboMetaDomainFactory {
 			return new Oride(url);
 		}else if (side !=null && side.equals(Constants.PROVIDER_SIDE)){
 			return new Provider(url);
+		}else if (proto !=null && proto.equals(CMocking.PROTOCOL)){
+			return new CMocking(url);
 		}
 		return null;
 	}

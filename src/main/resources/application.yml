@@ -22,7 +22,7 @@ spring:
 server:
   context-path: /monitor
 dubbo: 
-   registryAddress: zookeeper://192.168.31.243:2181
+   registryAddress: zookeeper://192.168.31.151:2181
    registryCheck: false
    registryTimeout: 5000
    applicationName: njwd-dubbo-monitor

@@ -154,7 +154,7 @@ public class ProviderService extends DefaultMonitorHandler  implements DubboCore
 					
 						mockServices.executeMock(services, mockParam,groupName);
 						
-						c.setMockDown(StringUtils.isNotBlank(mockParam)?true:false);
+						//c.setMockDown(StringUtils.isNotBlank(mockParam)?true:false);
 					
 				}
 				

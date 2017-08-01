@@ -20,7 +20,7 @@ public class Oride extends Invoker {
 	}
 	public Oride(URL url) {
 		super(url);
-		
+		this.params = url.getParameter("mock","");
 	}
 	
 

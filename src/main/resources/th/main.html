@@ -2,20 +2,32 @@
 <html>
 <head th:replace="common/header :: header(~{::title},~{::script})">
 	<title>服务管理中心</title>
-	<script type="text/javascript">
-	<!-- 加入页面的的脚本 -->
-	
-		$(function() {
-			
-			$("a[data-url]").click(function(evt) {
-				console.log($(this).data("url"));
-				 loadPage($(this).data("url"));
-				 $("ul.treeview-menu li").removeClass("active");
-				 $(this).parent().addClass("active");
-			});
-
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+    var context = [[@{/}]];
+	/*]]>*/
+	 var stompClient= new StompWSClient(context+"/mntep") ;
+	$(function() {
+		//切换main-content
+		$("a[data-url]").click(function(evt) {
+			if($(this).hasClass('no-impl')){
+				alalert.error("暂未实现");
+				return false;
+			}
+			console.log($(this).data("url"));
+			stompClient.clear();
+			 loadPage($(this).data("url"));
+			 $("ul.treeview-menu li").removeClass("active");
+			 $(this).parent().addClass("active");
+			 
 		});
-	
+		
+		
+		
+	});
+		
+
+		    
 	</script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini ">
@@ -203,11 +215,11 @@
 						</span>
 					</a>
 						<ul class="treeview-menu">
-							<li class="active"><a href="#" data:url="@{/meta/index}"><i
+							<li ><a href="#" data:url="@{/meta/index}"><i
 									class="fa fa-bicycle"></i>配置管理</a></li>
-									<li class="active"><a href="#" data:url="@{/isett/index}"><i
+									<li ><a href="#" data:url="@{/isett/index}"><i
 									class="fa fa-bicycle"></i>服务设置</a></li>
-									<li class="active"><a href="#" data:url="@{/relat/index}"><i
+									<li ><a href="#" data:url="@{/relat/index}"><i
 									class="fa fa-bicycle"></i>调用关系</a></li>
 						</ul></li>
 						<li class="treeview"><a href="#"> <i
@@ -215,10 +227,29 @@
 							class="pull-right-container"> <i
 								class="fa fa-angle-left pull-right"></i>
 						</span>
-					</a>
+						</a>
 						<ul class="treeview-menu">
-							<li class="active"><a href="#" data:url="@{/sta/all/index}"><i
+							<li ><a href="#" data:url="@{/sta/all/index}"><i
 									class="fa fa-bicycle"></i>全量统计</a></li>
+							<li><a href="#" class="no-impl" data:url="@{/sta/all/index}"><i
+									class="fa fa-bicycle "></i>按服务统计(小时/分钟)</a></li>
+							<li ><a href="#" class="no-impl" data:url="@{/sta/all/index}"><i
+									class="fa fa-bicycle "></i>按方法统计(小时/分钟)</a></li>
+									
+						</ul></li>
+						<li class="treeview"><a href="#"> <i
+							class="fa fa-calendar-check-o"></i> <span>监控管理</span> <span
+							class="pull-right-container"> <i
+								class="fa fa-angle-left pull-right"></i>
+						</span>
+						</a>
+						<ul class="treeview-menu">
+							<li ><a href="#" data:url="@{/alarm/index}"><i
+									class="fa fa-bicycle"></i>监控规则</a></li>
+							<li><a href="#" class="no-impl" data:url="@{/sta/all/index}"><i
+									class="fa fa-bicycle "></i>报警列表</a></li>
+							<li ><a href="#" class="no-impl" data:url="@{/sta/all/index}"><i
+									class="fa fa-bicycle "></i>处理管理</a></li>
 									
 						</ul></li>
 					<!-- 

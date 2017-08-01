@@ -6,6 +6,7 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
@@ -19,6 +20,7 @@ public class ListenerMonitorService implements MonitorService {
 
 	private Logger log = LoggerFactory.getLogger(ListenerMonitorService.class);
 	@Autowired
+	@Qualifier("monitorAsyncExecutor")
 	Executor executor;
 	@Override
 	// 这里计算时间估计会长，采用异步的方式 立即返回

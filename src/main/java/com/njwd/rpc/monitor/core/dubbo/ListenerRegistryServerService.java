@@ -25,10 +25,11 @@ import com.njwd.rpc.monitor.core.meta.InvokeMetaEvent;
 import com.njwd.rpc.monitor.core.services.ListenerAdapterService;
 
 @Component
-public class ListenerRegistryServerService implements InitializingBean, DisposableBean,
-		NotifyListener {
+public class ListenerRegistryServerService implements InitializingBean,
+		DisposableBean, NotifyListener {
 
-	private Logger log = LoggerFactory.getLogger(ListenerRegistryServerService.class);
+	private Logger log = LoggerFactory
+			.getLogger(ListenerRegistryServerService.class);
 
 	private static final URL SUBSCRIBE = new URL(Constants.ADMIN_PROTOCOL,
 			NetUtils.getLocalHost(), 0, "", Constants.INTERFACE_KEY,
@@ -45,19 +46,17 @@ public class ListenerRegistryServerService implements InitializingBean, Disposab
 
 	@Reference
 	private RegistryService registryService;
-	
+
 	@Autowired
 	private ListenerAdapterService listerService;
-	
+
 	private Object lock = new Object();
 
 	@Autowired
 	SpringUtils springUtil;
 	/**
-	 * 这里的结构是：
-	 *   category{consumer,provider,configurators,route}
-	 *      |- servicesKey=group:/interface:version
-	 *         |- id ： url
+	 * 这里的结构是： category{consumer,provider,configurators,route} |-
+	 * servicesKey=group:/interface:version |- id ： url
 	 */
 	private final ConcurrentMap<String, ConcurrentMap<String, Map<Long, URL>>> registryCache = new ConcurrentHashMap<String, ConcurrentMap<String, Map<Long, URL>>>();
 
@@ -66,7 +65,7 @@ public class ListenerRegistryServerService implements InitializingBean, Disposab
 	}
 
 	public void afterPropertiesSet() throws Exception {
-		log.info("monitor 订阅  ：{}",SUBSCRIBE.toFullString());
+		log.info("monitor 订阅  ：{}", SUBSCRIBE.toFullString());
 		registryService.subscribe(SUBSCRIBE, this);
 	}
 
@@ -77,28 +76,62 @@ public class ListenerRegistryServerService implements InitializingBean, Disposab
 	// 收到的通知对于 ，同一种类型数据（override、subcribe、route、其它是Provider），同一个服务的数据是全量的
 	public void notify(List<URL> urls) {
 		log.debug(Arrays.toString(urls.toArray()));
-		
+
 		if (urls == null || urls.isEmpty()) {
 			return;
 		}
 		synchronized (lock) {
+			// 发送全量empty协议，然后再发送增加;
+			if (urls.size() > 0
+					&& !urls.get(0).getProtocol().equalsIgnoreCase("empty")) {
+
+				URL _lastUrl = urls.get(0);
+				String proto = _lastUrl.getProtocol();
+				String side = _lastUrl.getParameter("side");
+				String category = null;
+				if (proto.equals(Constants.ROUTERS_CATEGORY)
+						|| proto.equals(Constants.ROUTE_PROTOCOL)) {
+					category = "routers";
+				} else if (proto.equals(Constants.CONSUMER_PROTOCOL)) {
+					category = "consumers";
+				} else if (proto.equals(Constants.OVERRIDE_PROTOCOL)) {
+					category = "configurators";
+				} else if (side != null && side.equals(Constants.PROVIDER_SIDE)) {
+					category = "providers";
+				}
+				if (category != null) {
+					URL emptyUrl = new URL(Constants.EMPTY_PROTOCOL,
+							_lastUrl.getIp(), _lastUrl.getPort(),
+							_lastUrl.getPath(), "category", category, "group",
+							"*", "interface", _lastUrl.getParameter(
+									Constants.INTERFACE_KEY, "*"), "version",
+							"*");
+					log.info("自定义构建empty://协议，先清除信息,{}",
+							_lastUrl.toFullString());
+					InvokeMetaEvent event = new InvokeMetaEvent(this, emptyUrl);
+					SpringUtils.getApplicationContext().publishEvent(event);
+				}
+
+			}
 			for (URL url : urls) {
-				//admin 协议忽略
-				if(url.getProtocol().equalsIgnoreCase(Constants.ADMIN_PROTOCOL)){
+
+				// admin 协议忽略
+				if (url.getProtocol()
+						.equalsIgnoreCase(Constants.ADMIN_PROTOCOL)) {
 					continue;
 				}
-				//consumer & monitorservices忽略
-				if(url.getProtocol().equals(Constants.CONSUMER) && url.getServiceInterface().equals("com.alibaba.dubbo.monitor.MonitorService")){
+				// consumer & monitorservices忽略
+				if (url.getProtocol().equals(Constants.CONSUMER)
+						&& url.getServiceInterface().equals(
+								"com.alibaba.dubbo.monitor.MonitorService")) {
 					continue;
 				}
 				InvokeMetaEvent event = new InvokeMetaEvent(this, url);
 				SpringUtils.getApplicationContext().publishEvent(event);
-				//listerService.actionService(url);
-				
+				// listerService.actionService(url);
+
 			}
 		}
-		
-		
-		
+
 	}
 }

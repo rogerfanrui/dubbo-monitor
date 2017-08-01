@@ -32,9 +32,9 @@
 				<!-- /.box-header -->
 				<div class="dataTables_filter" id="searchDiv">
 					<div class="btn-group">
-						<button type="button" class="btn btn-default" data-btn-type="add">新增</button>
-						<button type="button" class="btn btn-default" data-btn-type="edit">编辑</button>
-						<button type="button" class="btn btn-default"
+						<button type="button" class="btn btn-default no-impl" data-btn-type="add">新增</button>
+						<button type="button" class="btn btn-default no-impl" data-btn-type="edit">编辑</button>
+						<button type="button" class="btn btn-default no-impl"
 							data-btn-type="delete">删除</button>
 					</div>
 				</div>
@@ -88,7 +88,9 @@
 			} ]
 
 		});
-
+		$('.no-impl').click(function(){
+			alalert.error('暂未实现');
+		});
 
 	});
 	var fdata;

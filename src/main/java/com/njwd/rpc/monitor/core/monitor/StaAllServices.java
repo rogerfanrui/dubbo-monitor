@@ -1,8 +1,10 @@
 package com.njwd.rpc.monitor.core.monitor;
 
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import com.google.common.collect.Sets;
+import com.njwd.rpc.monitor.config.SpringUtils;
+import com.njwd.rpc.monitor.core.alarm.AlarmEvent;
 import com.njwd.rpc.monitor.core.domain.StatisticsInfo;
 import com.njwd.rpc.monitor.core.monitor.domain.StaAll;
 
@@ -19,14 +23,18 @@ public class StaAllServices  implements ApplicationListener<MonitorEvent>{
 	@Autowired
 	RedisTemplate<String, StaAll> redisTemplate;
 	
+	@Autowired
+	@Qualifier("monitorAsyncExecutor")
+	Executor executor;
+	
 	private Interner<String> pool = Interners.newWeakInterner();
 	
 	
 	@Override
 	public void onApplicationEvent(MonitorEvent event) {
-		StatisticsInfo sinfo =event.getSobj();
+		final StatisticsInfo sinfo =event.getSobj();
 		synchronized (pool.intern(sinfo.getService())) {
-			StaAll sta =	get(event.getSobj().getService());
+			final StaAll sta =	get(event.getSobj().getService());
 			sta.setServicesName(event.getSobj().getService());
 			if(sinfo.isComsumer()){
 				sta.setComElapsed(sta.getComElapsed()+sinfo.getElapsed());
@@ -38,6 +46,15 @@ public class StaAllServices  implements ApplicationListener<MonitorEvent>{
 				sta.setProSuccessCount(sta.getProSuccessCount()+sinfo.getSuccess());
 			}
 			this.redisTemplate.opsForValue().set(key(sinfo.getService()), sta);
+			executor.execute(new Runnable() {
+				
+				@Override
+				public void run() {
+					AlarmEvent event = new AlarmEvent(this, sinfo,sta);
+					SpringUtils.getApplicationContext().publishEvent(event);
+					
+				}
+			});
         }
 		
 		

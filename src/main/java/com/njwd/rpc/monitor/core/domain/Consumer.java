@@ -17,7 +17,7 @@ public class Consumer extends Invoker {
 
 	private List<Method> methods;
 
-
+	private String type="consumer";
 	public Consumer() {
 	}
 

@@ -6,16 +6,19 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.dubbo.common.Constants;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.njwd.rpc.monitor.core.domain.CMocking;
 import com.njwd.rpc.monitor.core.domain.Consumer;
 import com.njwd.rpc.monitor.core.domain.Empty;
 import com.njwd.rpc.monitor.core.domain.Invoker;
+import com.njwd.rpc.monitor.core.domain.Oride;
 import com.njwd.rpc.monitor.core.domain.Provider;
 import com.njwd.rpc.monitor.core.domain.inrelation.InvokerRealationDomain;
 import com.njwd.rpc.monitor.core.domain.inrelation.LineDomain;
@@ -26,61 +29,97 @@ import com.njwd.rpc.monitor.core.util.Tool;
 @Service
 public class InvokerRealtionServices implements ApplicationListener<InvokeMetaEvent>{
 	private Logger log = LoggerFactory.getLogger(InvokerRealtionServices.class);
+	@Autowired  
+    private SimpMessageSendingOperations messageSendOper;  
+	
 	private InvokerRealationDomain data = new InvokerRealationDomain(); 
 	
 	private Set<Provider> providers = Sets.newConcurrentHashSet();
 
 	private Set<Consumer> consumer = Sets.newConcurrentHashSet();
 	
+	 private Object lock = new Object();
+	
 	@Override
 	public void onApplicationEvent(InvokeMetaEvent event) {
-		if(event.getSobj() == null){
-			return;
-		}
-		Invoker invoker =event.getSobj();
-		if(invoker instanceof Provider){
-			NodeDomain _n=		add(invoker);
-			List<Invoker> ps =	searchConsumers(invoker);
-			
-			for(Invoker i:ps){
-				NodeDomain  _nd =data.searchNodeDomain(i.getAppName());
-				if(_nd == null){
-					log.warn("无法匹配 consumer 与 node的关联,provider:{}",i.getUrl().toFullString());
-					continue;
-				}
-				searchAndAddLineDomain(_nd.getId(),_n.getId() , invoker.getServiceName());
-				
+		synchronized (lock) {
+			if(event.getSobj() == null){
+				return;
 			}
-			providers.add((Provider)invoker);
-		}else if(invoker instanceof Consumer){
-			NodeDomain _n=	add(invoker);
-			List<Invoker> ps =	searchProvicer(invoker);
-			
-			for(Invoker i:ps){
-				NodeDomain  _nd =data.searchNodeDomain(i.getAppName());
-				if(_nd == null){
-					log.warn("无法匹配 provider 与 node的关联,provider:{}",i.getUrl().toFullString());
-					continue;
+			Invoker invoker =event.getSobj();
+			if(invoker instanceof Provider){
+				NodeDomain _n=		add(invoker);
+				List<Invoker> ps =	searchConsumers(invoker);
+				
+				for(Invoker i:ps){
+					NodeDomain  _nd =data.searchNodeDomain(i.getAppName());
+					if(_nd == null){
+						log.warn("无法匹配 consumer 与 node的关联,provider:{}",i.getUrl().toFullString());
+						continue;
+					}
+					searchAndAddLineDomain(_nd.getId(),_n.getId() , invoker.getServiceName());
+					
 				}
-				searchAndAddLineDomain(_n.getId(), _nd.getId(), invoker.getServiceName());
+				addSets(providers, (Provider)invoker);
+			}else if(invoker instanceof Consumer){
+				NodeDomain _n=	add(invoker);
+				List<Invoker> ps =	searchProvicer(invoker);
 				
-			}
-			consumer.add((Consumer)invoker);
-			
-		}else if (invoker instanceof Empty){
-			Empty empty = (Empty)invoker;
-			if(empty.getCategory().equals(Constants.PROVIDERS_CATEGORY)){
+				for(Invoker i:ps){
+					NodeDomain  _nd =data.searchNodeDomain(i.getAppName());
+					if(_nd == null){
+						log.warn("无法匹配 provider 与 node的关联,provider:{}",i.getUrl().toFullString());
+						continue;
+					}
+					searchAndAddLineDomain(_n.getId(), _nd.getId(), invoker.getServiceName());
+					
+				}
+				addSets(consumer, (Consumer)invoker);
+			}else if (invoker instanceof Empty){
+				Empty empty = (Empty)invoker;
+				if(empty.getCategory().equals(Constants.PROVIDERS_CATEGORY)){
+					
+					removeNodeDomain(empty);
+					removeCurrentInfo(empty);
+					
+				}else if(empty.getCategory().equals(Constants.CONSUMERS_CATEGORY)){
+					removeNodeDomain(empty);
+					removeCurrentInfo(empty);
+				}else if(empty.getCategory().equals(Constants.CONFIGURATORS_CATEGORY)){
+					for(Consumer c:consumer){
+						if(Tool.emptyMatch( invoker.getUrl(),c.getUrl())){
+							c.setmDownStatus(0);
+							messageSendOper.convertAndSend("/topic/iset/consumer","C1");
+						}
+					}
+				}
+			}else if (invoker instanceof CMocking){
+				CMocking empty = (CMocking)invoker;
+				for(Consumer c:consumer){
+					if(Tool.isMatch(c.getUrl(), empty.getUrl())){
+						c.setmDownStatus(1);
+						messageSendOper.convertAndSend("/topic/iset/consumer","C1");
+					}
+				}
+			}else if (invoker instanceof Oride){
+				Oride oride = (Oride)invoker;
+				String param = oride.getParams();
+				if(param.contains("null")){
+					for(Consumer c:consumer){
+						if(Tool.isMatch(c.getUrl(), oride.getUrl())){
+							c.setmDownStatus(2);
+							messageSendOper.convertAndSend("/topic/iset/consumer","C1");
+						}
+					}
+				}
 				
-				removeNodeDomain(empty);
-				removeCurrentInfo(empty);
-				
-			}else if(empty.getCategory().equals(Constants.CONSUMERS_CATEGORY)){
-				removeNodeDomain(empty);
-				removeCurrentInfo(empty);
 			}
 		}
 		
+		
 	}
+	
+	
 	
 	public void removeCurrentInfo(Empty empty){
 		Set<? extends Invoker> sets  = null;
@@ -93,7 +132,7 @@ public class InvokerRealtionServices implements ApplicationListener<InvokeMetaEv
 		Iterator<? extends  Invoker> invokers = sets.iterator();
 		while(invokers.hasNext()){
 			Invoker i=	invokers.next();
-			if(Tool.isMatch(empty.getUrl(), i.getUrl())){
+			if(Tool.emptyMatch(empty.getUrl(), i.getUrl())){
 				invokers.remove();
 			}
 		}
@@ -112,7 +151,7 @@ public class InvokerRealtionServices implements ApplicationListener<InvokeMetaEv
 				while(invokers.hasNext()){
 					Invoker i=	invokers.next();
 					//if(invoke.getClass().getName().equals(i.getClass().getName())){
-						if(Tool.isMatch(i.getUrl(), invoke.getUrl())){
+						if(Tool.emptyMatch(i.getUrl(), invoke.getUrl())){
 							invokers.remove();
 						}
 					//}
@@ -187,6 +226,23 @@ public class InvokerRealtionServices implements ApplicationListener<InvokeMetaEv
 		}
 		
 		ld.addServices(serivices);
+	}
+	private <T extends Invoker> void  addSets(Set<T> sets  , T invoker){
+		boolean isMatch=false;
+		for(Invoker i:sets){
+			if(Tool.isMatch(i.getUrl(), invoker.getUrl())){
+				isMatch = true;
+			}
+		}
+		if(!isMatch){
+			sets.add(invoker);
+			if(invoker instanceof Provider){
+				messageSendOper.convertAndSend("/topic/iset/provider","P1");
+			}else if (invoker instanceof Consumer){
+				messageSendOper.convertAndSend("/topic/iset/consumer","C1");
+			}
+			
+		}
 	}
 	
 	private List<Invoker> searchProvicer(Invoker invoker){

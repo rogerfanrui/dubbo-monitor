@@ -22,18 +22,28 @@ import com.alibaba.dubbo.common.utils.StringUtils;
 
 public class Tool {
 
-	public static boolean isMatch(URL consumerUrl, URL providerUrl) {
+	public static  boolean emptyMatch(URL consumerUrl, URL providerUrl){
+		return isMatch(consumerUrl, providerUrl,false);
+	}
+	public static  boolean isMatch(URL consumerUrl, URL providerUrl){
+		return isMatch(consumerUrl, providerUrl,true);
+	}
+	
+	
+	public static boolean isMatch(URL consumerUrl, URL providerUrl,boolean isIpport) {
 		String consumerInterface = consumerUrl.getServiceInterface();
 		String providerInterface = providerUrl.getServiceInterface();
-
-		//match ip
-		if(!consumerUrl.getIp().equals(providerUrl.getIp())){
-			return false;
+		if(isIpport){
+			//match ip
+			if(!consumerUrl.getIp().equals(providerUrl.getIp())){
+				return false;
+			}
+			//match port 
+			if(consumerUrl.getPort()!=providerUrl.getPort()){
+				return false;
+			}
 		}
-		//match port 
-		if(consumerUrl.getPort()!=providerUrl.getPort()){
-			return false;
-		}
+		
 		
 		if (!(Constants.ANY_VALUE.equals(consumerInterface) || StringUtils
 				.isEquals(consumerInterface, providerInterface)))

@@ -31,6 +31,7 @@
 					            <th data-field="group">group</th>
 					            <th data-field="ip">ip</th>
 					            <th data-field="ip">port</th>
+					          
 					        </tr>
 					    </thead>
 					</table>
@@ -43,9 +44,11 @@
 					        <tr>
 					              <th data-field="appName">appName</th>
 					              <th data-field="serviceName">serviceName</th>
-					            <th data-field="ctime">ctime</th>
-					            <th data-field="group">group</th>
-					            <th data-field="ip">ip</th>
+					          	  <th data-field="ctime">ctime</th>
+					              <th data-field="group">group</th>
+					              <th data-field="ip">ip</th>
+					              <th data-formatter="showBtns">Oper</th>
+					              
 					        </tr>
 					    </thead>
 					</table>
@@ -59,31 +62,87 @@
 <script type="text/javascript">
 $(function(){
 	$('.nav-tabs li a').click(function(){
-		console.log('click');
 		var _this = this;
-		var table =$('#'+_this.dataset.tid);
+		refuse(_this.dataset.tid);
+	});
+	stompClient.subscribe("/topic/iset/provider",function(resp){
+		refuse('p_table');
+    }); 
+	stompClient.subscribe("/topic/iset/consumer",function(resp){
+		refuse('c_table');
+    }); 
+	$('#p_table').bootstrapTable({});
+	
 
+	$('#c_table').bootstrapTable({});
+	$('.nav-tabs li a:eq(0)').click();
+	
+	$('#tab_2').on('click','button[data-role=handlerMockdown]',function(){
+		var _this=$(this);　　　
+		var _index =_this.data("index")　;
+		var _row =$('#c_table').bootstrapTable('getData')[_index];
+		doRequest({
+			url : context+"/isett/mock",
+			type:'POST',
+			data:{
+				appName:_row.appName,
+				serviceName:_row.serviceName,
+				group:_row.group,
+				port:_row.port,
+				ip:_row.ip
+			}
+		}, function(data) {
+			_this.addClass("disabled");
+			_this.text('处理中');
+			_this.unbind('click');
+		});
+    });
+	$('#tab_2').on('click','button[data-role=handlerRecover]',function(){　　　
+		var _this=$(this);　　　
+		var _index =_this.data("index")　;
+		var _row =$('#c_table').bootstrapTable('getData')[_index];
+		doRequest({
+			url : context+"/isett/unmock",
+			type:'POST',
+			data:{
+				appName:_row.appName,
+				serviceName:_row.serviceName,
+				group:_row.group,
+				port:_row.port,
+				ip:_row.ip
+			}
+		}, function(data) {
+			_this.addClass("disabled");
+			_this.text('处理中');
+			_this.unbind('click');
+		});
+    });
+	$('#tttt').click(function(){
+		
+	});
+	
+	
+	function refuse(taId){
+		var table =$('#'+taId);
 		doRequest({
 			url : table.data("url")
 		}, function(data) {
 			table.bootstrapTable('load', data);
 		});
-	});
-	$('#p_table').bootstrapTable({
-		
-
-	});
-	
-
-	$('#c_table').bootstrapTable({
-		
-
-	});
-	$('.nav-tabs li a:eq(0)').click();
-	
-	
+	}
 });
-
+function showBtns(value,row,index){
+	if( row.mDownStatus==0){
+	
+		 return `<button type="button" class="btn btn-block btn-default" data-index="${index}" data-role="handlerMockdown">降级</button>`;
+	 }else if( row.mDownStatus==1){
+		 
+		 return `<button type="button" class="btn btn-block btn-default disabled" data-index="${index}" >处理中</button>`;
+	 }else if( row.mDownStatus==2){
+			return `<button type="button" class="btn btn-block btn-default" data-index="${index}" data-role="handlerRecover">恢复</button>`;
+		
+	 }
+}
 function showFullUrl(index, row){
 	 return row.metaInfo;
 }

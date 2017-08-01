@@ -17,8 +17,8 @@ public class ExecutorConfig {
     private int maxPoolSize = 5;  
     private int queueCapacity = 10000;  
   
-    @Bean
-    public Executor mySimpleAsync() {  
+    @Bean(name="monitorAsyncExecutor")
+    public Executor monitorAsyncExecutor() {  
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();  
         executor.setCorePoolSize(corePoolSize);  
         executor.setMaxPoolSize(maxPoolSize);  

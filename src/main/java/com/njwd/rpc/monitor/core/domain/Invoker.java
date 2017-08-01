@@ -3,6 +3,7 @@ package com.njwd.rpc.monitor.core.domain;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
@@ -11,12 +12,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Invoker extends SuperBean {
 
-
+	@NotEmpty
 	private String appName;
+	@NotEmpty
 	private String serviceName;
 	@JSONField(name="ctime",format="yyyy-MM-dd HH:mm:ss")
 	private Date ctime;
-	private boolean isMockDown=false;
+	private Integer mDownStatus=0;
+	@NotEmpty
 	private String ip;
 	private int port;
 	private String group;
@@ -100,14 +103,16 @@ public class Invoker extends SuperBean {
 	public void setCtime(Date ctime) {
 		this.ctime = ctime;
 	}
-	
-	public boolean isMockDown() {
-		return isMockDown;
+
+	public Integer getmDownStatus() {
+		return mDownStatus;
 	}
 
-	public void setMockDown(boolean isMockDown) {
-		this.isMockDown = isMockDown;
+	public void setmDownStatus(Integer mDownStatus) {
+		this.mDownStatus = mDownStatus;
 	}
+	
+	
 
 	
 	

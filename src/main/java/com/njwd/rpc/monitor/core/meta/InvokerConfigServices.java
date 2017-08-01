@@ -25,32 +25,36 @@ public class InvokerConfigServices implements ApplicationListener<InvokeMetaEven
 
 	
 	 private static Table<String, String, List<Invoker>> data = HashBasedTable.create();
+	 private Object lock = new Object();
 	@Override
 	public void onApplicationEvent(InvokeMetaEvent event) {
-		if(event.getSobj() == null){
-			return;
-		}
-		Invoker invoker =event.getSobj();
-		if(invoker instanceof Provider){
-			add(invoker, Constants.PROVIDERS_CATEGORY);
-		}else if(invoker instanceof Consumer){
-			add(invoker, Constants.CONSUMERS_CATEGORY);
-		}else if(invoker instanceof Route){
-			add(invoker, Constants.ROUTERS_CATEGORY);
-		}else if(invoker instanceof Oride){
-			add(invoker, Constants.CONFIGURATORS_CATEGORY);
-		}else if (invoker instanceof Empty){
-			Empty empty = (Empty)invoker;
-			if(empty.getCategory().equals(Constants.PROVIDERS_CATEGORY)){
-				remove(invoker, Constants.PROVIDERS_CATEGORY);
-			}else if(empty.getCategory().equals(Constants.CONSUMERS_CATEGORY)){
-				remove(invoker, Constants.CONSUMERS_CATEGORY);
-			}else if(empty.getCategory().equals(Constants.ROUTERS_CATEGORY)){
-				remove(invoker, Constants.ROUTERS_CATEGORY);
-			}else if(empty.getCategory().equals(Constants.CONFIGURATORS_CATEGORY)){
-				remove(invoker, Constants.CONFIGURATORS_CATEGORY);
+		synchronized (lock) {
+			if(event.getSobj() == null){
+				return;
+			}
+			Invoker invoker =event.getSobj();
+			if(invoker instanceof Provider){
+				add(invoker, Constants.PROVIDERS_CATEGORY);
+			}else if(invoker instanceof Consumer){
+				add(invoker, Constants.CONSUMERS_CATEGORY);
+			}else if(invoker instanceof Route){
+				add(invoker, Constants.ROUTERS_CATEGORY);
+			}else if(invoker instanceof Oride){
+				add(invoker, Constants.CONFIGURATORS_CATEGORY);
+			}else if (invoker instanceof Empty){
+				Empty empty = (Empty)invoker;
+				if(empty.getCategory().equals(Constants.PROVIDERS_CATEGORY)){
+					remove(invoker, Constants.PROVIDERS_CATEGORY);
+				}else if(empty.getCategory().equals(Constants.CONSUMERS_CATEGORY)){
+					remove(invoker, Constants.CONSUMERS_CATEGORY);
+				}else if(empty.getCategory().equals(Constants.ROUTERS_CATEGORY)){
+					remove(invoker, Constants.ROUTERS_CATEGORY);
+				}else if(empty.getCategory().equals(Constants.CONFIGURATORS_CATEGORY)){
+					remove(invoker, Constants.CONFIGURATORS_CATEGORY);
+				}
 			}
 		}
+		
 		
 	}
 	
@@ -88,7 +92,12 @@ public class InvokerConfigServices implements ApplicationListener<InvokeMetaEven
 			@Override
 			public boolean apply(Invoker input) {
 				
-				boolean flag= Tool.isMatch(invoker.getUrl(), input.getUrl());
+				boolean flag= false;
+				if(invoker instanceof Empty){
+					flag=Tool.emptyMatch(invoker.getUrl(), input.getUrl());
+				}else{
+					flag=Tool.isMatch(invoker.getUrl(), input.getUrl());
+				}
 				return !flag;
 			}
 			

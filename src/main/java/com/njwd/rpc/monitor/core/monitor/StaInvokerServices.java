@@ -2,16 +2,19 @@ package com.njwd.rpc.monitor.core.monitor;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import com.google.common.collect.Maps;
+import com.njwd.rpc.monitor.config.SpringUtils;
+import com.njwd.rpc.monitor.core.alarm.AlarmEvent;
 import com.njwd.rpc.monitor.core.domain.StatisticsInfo;
 import com.njwd.rpc.monitor.core.monitor.domain.StaInvoker;
 import com.njwd.rpc.monitor.core.monitor.util.ScoreUtil;
@@ -24,6 +27,8 @@ public class StaInvokerServices  implements ApplicationListener<MonitorEvent>{
 	
 	@Autowired
 	RedisTemplate<String, StaInvoker> redisTemplate;
+	
+	
 	
 	private Map<String, StaInvoker> cache = Maps.newConcurrentMap();
 	
@@ -55,7 +60,7 @@ public class StaInvokerServices  implements ApplicationListener<MonitorEvent>{
 		
 	}
 	
-	private StaInvoker getLast(StatisticsInfo info,int type){
+	private StaInvoker getLast(final StatisticsInfo info,int type){
 		String key = key(info, type);
 		Double soce =getScore(info, type);
 		StaInvoker _result = cache.get(key);
@@ -78,6 +83,10 @@ public class StaInvokerServices  implements ApplicationListener<MonitorEvent>{
 		} else if (!_result.getScore().equals(soce)){
 			//这里相当于切换KEY
 			_result =cacheAdd(info, soce, type, key);
+			
+			
+				
+			
 		}
 		return _result;
 		

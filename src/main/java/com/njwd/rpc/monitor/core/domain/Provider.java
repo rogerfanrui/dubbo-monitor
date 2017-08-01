@@ -22,6 +22,7 @@ public class Provider extends Invoker {
 
 	private List<Method> methods;
 
+	private String type="provider";
 	public Provider() {
 	}
 

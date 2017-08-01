@@ -1,12 +1,15 @@
 package com.njwd.rpc.monitor.core.services;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.registry.RegistryService;
+import com.njwd.rpc.monitor.core.domain.CMocking;
+import com.njwd.rpc.monitor.core.dubbo.DubboMockServices;
 
 @Service
 public class MockServices {
@@ -15,6 +18,7 @@ public class MockServices {
 	
 	@Autowired
 	private RegistryService registryService;
+	
 	
 	public void executeMock(String services, String appName,String ip,String mockParam,String groupName){
 		
@@ -34,6 +38,8 @@ public class MockServices {
 		}else{
 			registryService.unregister(or.toUrl());
 		}
+		
+		
 
 	}
 	

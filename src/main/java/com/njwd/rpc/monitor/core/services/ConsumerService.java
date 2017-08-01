@@ -90,7 +90,7 @@ public class ConsumerService extends DefaultMonitorHandler implements DubboCoreS
 						if(c.getAppName().equals(appName)){
 							
 							
-							c.setMockDown(StringUtils.isNotBlank(mockKey)?true:false);
+						//	c.setMockDown(StringUtils.isNotBlank(mockKey)?true:false);
 						}
 					}
 					
@@ -192,7 +192,7 @@ public class ConsumerService extends DefaultMonitorHandler implements DubboCoreS
 					if(c.getAppName().equals(appName)){
 						mockServices.executeMock(services, appName, ip, mockParam,null);
 						
-						c.setMockDown(StringUtils.isNotBlank(mockParam)?true:false);
+						//c.setMockDown(StringUtils.isNotBlank(mockParam)?true:false);
 					}
 				}
 				
@@ -238,7 +238,7 @@ public class ConsumerService extends DefaultMonitorHandler implements DubboCoreS
    				if(Tool.getInterface(entry.getKey()).equals(c.getServiceName())){
    					
    					for(Consumer cu:entry.getValue()){
-   						if(cu.getAppName().equals(c.getAppName())&& !cu.isMockDown()){
+   						//if(cu.getAppName().equals(c.getAppName())&& !cu.isMockDown()){
    							if(c.getIp().equals(Constants.ANYHOST_VALUE)||c.getIp().equals(cu.getIp())){
    								if(scale(cu)>=c.getErrorScale()){
    									//执行降级
@@ -247,7 +247,7 @@ public class ConsumerService extends DefaultMonitorHandler implements DubboCoreS
    							}
    							
    							
-   						}
+   						//}
    					}
    					
    				}

@@ -18,17 +18,18 @@
         <div class="dataTables_filter" id="searchDiv">
 					<div class="btn-group">
 						<button type="button" class="btn btn-default " data-btn-type="add">新增</button>
-						<button type="button" class="btn btn-default no-impl" data-btn-type="edit">编辑</button>
-						<button type="button" class="btn btn-default no-impl"
+						<button type="button" class="btn btn-default" data-btn-type="edit">编辑</button>
+						<button type="button" class="btn btn-default"
 							data-btn-type="delete">删除</button>
 					</div>
 				</div>
 				
                
-                       <table id="p_table" data-toolbar="#searchDiv" data-showFooter="false" data-search="true"   data-detail-view="true" d
+                       <table id="p_table" data-toolbar="#searchDiv" data-showFooter="false" data-search="true"   data-detail-view="true" data-click-to-select="true"
 						class="table table-bordered table-striped table-hover" data:url="@{/alarm/loadRule}">
 						<thead>
 					        <tr>
+					        	<th data-checkbox="true"></th>
 					            <th data-field="appName">应用名称</th>
 					            <th data-field="servicesName">服务名称</th>
 					            <th data-field="addTime">增加时间</th>
@@ -57,7 +58,32 @@ $(function(){
 
 	activeTable.bootstrapTable({});
 	loadFromModal();
-	
+	$('button[data-btn-type=delete]').click(function() {
+		var rows =activeTable.bootstrapTable('getSelections');
+		if(rows.length==0){
+			alalert.error("请选中行后删除");
+			return;
+		}
+		modals.confirm('确认删除?', function() {
+			for(i in rows){
+				var r = rows[i];
+				doRequest({
+					url : context+'/alarm/do/deleteRule',
+					type:'POST',
+					async:false
+					data:{
+						id:r.id,
+						appName:r.appName,
+						servicesName:r.servicesName
+					}
+				}, function(data) {
+					
+				});
+			}
+			alalert.succ('删除成功');
+			loadFromModal();
+		});
+	});
 	$('button[data-btn-type=add]').click(function() {
 		modals.openWin({
            	winId:winId,
@@ -72,7 +98,25 @@ $(function(){
            	} */
            });     
 	});
-	
+	$('button[data-btn-type=edit]').click(function() {
+		var rows =activeTable.bootstrapTable('getSelections');
+		if(rows.length!=1){
+			alalert.error("请选中1行后编辑");
+			return;
+		}
+		modals.openWin({
+           	winId:winId,
+           	title:'编辑规则',
+           	width:'900px',
+           	url:context+"/alarm/addrule?id="+rows.id
+           	/*, hideFunc:function(){
+           		modals.info("hide me");
+           	},
+           	showFunc:function(){
+           		modals.info("show me");
+           	} */
+           });     
+	});
 	
 });
 

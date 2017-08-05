@@ -6,33 +6,33 @@
 <div class="modal-body">
 
 	<form id="rule-form" name="rule-form" class="form-horizontal">
-		
+		<input type="hidden" name="id" id="id" th:value="${rule.id}"/>
 		<div class="box-body">
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="appName" class="col-sm-3 control-label">应用名称</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="appName" name="appName" placeholder="应用名称">
+						<input type="text" class="form-control" id="appName" name="appName" placeholder="应用名称" th:value="${rule.id}">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="servicesName" class="col-sm-3 control-label">服务名称</label>
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="servicesName" name="servicesName" placeholder="服务名称">
+						<input type="text" class="form-control" id="servicesName" name="servicesName" placeholder="服务名称" th:value="${rule.servicesName}">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="minutes" class="col-sm-3 control-label">监控分钟数</label>
 
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="minutes" name="minutes" placeholder="监控分钟数">
+						<input type="text" class="form-control" id="minutes" name="minutes" placeholder="监控分钟数" th:value="${rule.minutes}">
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="spercent" class="col-sm-3 control-label">成功百分比</label>
 
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="spercent" name="spercent" placeholder="成功百分比">
+						<input type="text" class="form-control" id="spercent" name="spercent" placeholder="成功百分比" th:value="${rule.spercent}">
 					</div>
 				</div>
 			</div>
@@ -42,7 +42,7 @@
 					<label for="userName" class="col-sm-3 control-label">用户名</label>
 
 					<div class="col-sm-8">
-						<input type="text" class="form-control" id="userName" name="userName" placeholder="用户名">
+						<input type="text" class="form-control" id="userName" name="userName" placeholder="用户名" th:value="${rule.userName}">
 					</div>
 				</div>
 				<div class="form-group">
@@ -51,7 +51,7 @@
 					<div class="col-sm-8">
 						<!--<input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机"
                                                            data-inputmask='"mask": "9999999999999"' data-mask>-->
-						<input type="text" class="form-control" id="mobiles" name="mobiles" placeholder="手机">
+						<input type="text" class="form-control" id="mobiles" name="mobiles" placeholder="手机" th:value="${rule.mobiles}">
 					</div>
 				</div>
 				<div class="form-group">
@@ -59,7 +59,7 @@
 
 					<div class="col-sm-8">
 						
-						<input type="text" class="form-control" id="email" name="email" placeholder="邮箱">
+						<input type="text" class="form-control" id="email" name="email" placeholder="邮箱" th:value="${rule.email}">
 					</div>
 				</div>
 				

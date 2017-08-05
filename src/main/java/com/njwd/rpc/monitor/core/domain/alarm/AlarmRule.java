@@ -10,9 +10,13 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.njwd.rpc.monitor.core.domain.Invoker;
+import com.njwd.rpc.monitor.core.domain.SuperBean;
 
 
-public class AlarmRule {
+public class AlarmRule extends SuperBean {
+	
+	
+	private String id;
 	@NotNull
 	private String servicesName;
 	@NotNull
@@ -32,6 +36,12 @@ public class AlarmRule {
 	private Double curSpencent;
 	
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public Double getCurSpencent() {
 		return curSpencent;
 	}

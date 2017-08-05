@@ -41,21 +41,31 @@ public class ClearRedisDataServices {
 		        		log.info("时间上不需要处理3个月前数据");
 		        	}
 		        	
-		        	Map<String,ClearRedisDatasHandlers> beans =	SpringUtils.getApplicationContext().getBeansOfType(ClearRedisDatasHandlers.class);
-		        	if(beans !=null){
-		        		for(ClearRedisDatasHandlers h:beans.values()){
-		        			List<String> keyPattenrs =h.minutesKeysPattern();
-		        			for(String k:keyPattenrs ){
-		        				Set<String> keys =	redisTemplate.keys(k);
-		        				if(keys !=null && !keys.isEmpty()){
-		        					for(String _k:keys){
-		        						redisTemplate.opsForZSet().removeRangeByScore(_k, startScoe, endScode);
-		        					}
-		        				}
-		        				
-		        			}
-		        		}
-		        	}
+		        	try {
+						Map<String, ClearRedisDatasHandlers> beans = SpringUtils
+								.getApplicationContext().getBeansOfType(
+										ClearRedisDatasHandlers.class);
+						if (beans != null) {
+							for (ClearRedisDatasHandlers h : beans.values()) {
+								List<String> keyPattenrs = h
+										.minutesKeysPattern();
+								for (String k : keyPattenrs) {
+									Set<String> keys = redisTemplate.keys(k);
+									if (keys != null && !keys.isEmpty()) {
+										for (String _k : keys) {
+											redisTemplate
+													.opsForZSet()
+													.removeRangeByScore(_k,
+															startScoe, endScode);
+										}
+									}
+
+								}
+							}
+						}
+					} catch (Exception e) {
+						log.error("clear redis data fail",e);
+					}
 		        	
 		        }
 		}, 1*60*60*1000l , 24*60*60*1000l);

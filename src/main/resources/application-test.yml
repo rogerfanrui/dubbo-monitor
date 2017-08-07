@@ -1,0 +1,21 @@
+server:
+  port: 8180
+spring: 
+  redis:
+    database: 8
+    host: 115.29.78.228
+    port: 7000
+    password: clianmeng.com
+    max-active: 20
+    max-wait: 120000
+    max-idle: 20
+    min-idle: 2
+    timeout: 0
+  thymeleaf: 
+    cache: true
+logging:
+  config: classpath:logback.xml
+  path: /logs/njwd
+  level: INFO
+sweager : 
+  enable: true

@@ -39,7 +39,7 @@ public class AlarmSmsNotifyServices {
 		String key = key(rule);
 		String _flag =this.redisTemplate.opsForValue().get(key);
 		if(StringUtils.isNotBlank(_flag)){
-			log.info("{}已 发送过，不在重复发送");
+			log.info("{}已发送过，不在重复发送",rule.getMobiles());
 			return;
 		}
 		//TODO 这里发送短信

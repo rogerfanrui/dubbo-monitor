@@ -104,11 +104,12 @@ $(function(){
 			alalert.error("请选中1行后编辑");
 			return;
 		}
+		console.log(rows);
 		modals.openWin({
            	winId:winId,
            	title:'编辑规则',
            	width:'900px',
-           	url:context+"/alarm/addrule?id="+rows.id
+           	url:context+"/alarm/addrule?id="+rows[0].id
            	/*, hideFunc:function(){
            		modals.info("hide me");
            	},

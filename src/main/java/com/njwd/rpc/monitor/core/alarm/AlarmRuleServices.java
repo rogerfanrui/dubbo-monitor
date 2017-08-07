@@ -137,7 +137,7 @@ public class AlarmRuleServices {
 			sumCounts += (s.getComErrorCount() + s.getComSuccessCount());
 			succesCounts += s.getComSuccessCount();
 		}
-		return (succesCounts / sumCounts) * 100d;
+		return sumCounts==0?100d:(succesCounts / sumCounts) * 100d;
 	}
 
 	@PostConstruct

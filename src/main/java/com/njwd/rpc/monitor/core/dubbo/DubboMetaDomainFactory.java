@@ -15,7 +15,7 @@ public class DubboMetaDomainFactory {
 	public static Invoker createMetaInfo(URL url){
 		String proto = url.getProtocol();
 		String side = url.getParameter("side");
-		if(proto.equals(Constants.ROUTERS_CATEGORY)||proto.equals(Constants.ROUTE_PROTOCOL) ){
+		if(proto.equals(Constants.ROUTERS_CATEGORY)||proto.equals(Constants.ROUTE_PROTOCOL)||proto.equals(Constants.CONDITION_PROTOCOL) ){
 			return new Route(url);
 		}else if (proto.equals(Constants.EMPTY_PROTOCOL)){
 			return new Empty(url);

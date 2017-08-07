@@ -23,6 +23,7 @@ public class Invoker extends SuperBean {
 	private String ip;
 	private int port;
 	private String group;
+	private String orignGroup;
 	@JsonIgnore
 	protected URL url;
 	
@@ -41,10 +42,24 @@ public class Invoker extends SuperBean {
 		this.ip=url.getHost();
 		this.port=url.getPort();
 		this.group = url.getParameter(Constants.GROUP_KEY,"*");
+		//这个地方是为了兼容当没有设置group的时候导致的问题
+		this.orignGroup= url.getParameter(Constants.GROUP_KEY);
+		if(StringUtils.isBlank(this.orignGroup)){
+			url.addParameter(Constants.GROUP_KEY, "*");
+		}
 		this.metaInfo = url.toFullString();
 	}
 	
 	
+	
+	public String getOrignGroup() {
+		return orignGroup;
+	}
+
+	public void setOrignGroup(String orignGroup) {
+		this.orignGroup = orignGroup;
+	}
+
 	public String getMetaInfo() {
 		return metaInfo;
 	}

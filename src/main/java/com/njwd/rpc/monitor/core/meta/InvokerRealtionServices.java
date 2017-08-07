@@ -230,7 +230,7 @@ public class InvokerRealtionServices implements ApplicationListener<InvokeMetaEv
 	private <T extends Invoker> void  addSets(Set<T> sets  , T invoker){
 		boolean isMatch=false;
 		for(Invoker i:sets){
-			if(Tool.isMatch(i.getUrl(), invoker.getUrl())){
+			if(Tool.isMatch(invoker.getUrl(),i.getUrl() )){
 				isMatch = true;
 			}
 		}

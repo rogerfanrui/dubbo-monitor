@@ -4,8 +4,8 @@
 	<h1>字典管理</h1>
 	<ol class="breadcrumb">
 		<li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
-		<li><a href="#">系统管理</a></li>
-		<li class="active">字典管理</li>
+		<li><a href="#">服务管理</a></li>
+		<li class="active">服务配置</li>
 	</ol>
 </section>
 
@@ -32,9 +32,9 @@
 				<!-- /.box-header -->
 				<div class="dataTables_filter" id="searchDiv">
 					<div class="btn-group">
-						<button type="button" class="btn btn-default no-impl" data-btn-type="add">新增</button>
+						<button type="button" class="btn btn-default " data-btn-type="add">新增</button>
 						<button type="button" class="btn btn-default no-impl" data-btn-type="edit">编辑</button>
-						<button type="button" class="btn btn-default no-impl"
+						<button type="button" class="btn btn-default "
 							data-btn-type="delete">删除</button>
 					</div>
 				</div>
@@ -54,15 +54,62 @@
 </section>
 
 <script>
-	var form = null;
+	var winId="invokersetting";
+
 	$(function() {
-		//初始化form表单
-		//form=$("#dict-form").form();
+		stompClient.subscribe("/topic/meta",function(resp){
+			alalert.info("收到新的元数据，执行刷新请求");
+			initTree(0);
+	    }); 
+		$('button[data-btn-type=add]').click(function() {
+			modals.openWin({
+	           	winId:winId,
+	           	title:'新增路由',
+	           	width:'500px',
+	           	url:context+"/meta/addroute"
+	           	/*, hideFunc:function(){
+	           		modals.info("hide me");
+	           	},
+	           	showFunc:function(){
+	           		modals.info("show me");
+	           	} */
+	           });     
+		});
+		$('button[data-btn-type=delete]').click(function() {
+			var lines = $('#user_table').bootstrapTable('getSelections');  
+			if(lines.length==1){  
+				  var metaInfo = lines[0].metaInfo;
+			     console.log(metaInfo);  
+			     if(metaInfo.indexOf("condition") >= 0 ){
+			    	 modals.confirm('确认删除?', function() {
+			    		 doRequest({
+							url : context+'/meta/removeRule',
+							type:'POST',
+							data:{
+								url:metaInfo
+							}
+						}, function(data) {
+							
+						});
+					});
+			    
+			     }else{
+			    	 alalert.error("暂时不支持非动态路由");
+			     }
+			    
+			  
+			}else{
+				alalert.error("请选中一行");
+			}  
+		});
+		
 
 		initTree(0);
 		$('#user_table').bootstrapTable({
 			toolbar : "#searchDiv",
 			search : "true",
+			singleSelect:true,
+			clickToSelect: true, 
 			showColumns : "true",
 			 detailView:"true",
 	         detailFormatter:function(index, row){
@@ -70,7 +117,9 @@
 	         },
 			showFooter : "false",
 			data : [],
-			columns : [ {
+			columns : [{
+                checkbox: true
+            }, {
 				field : 'appName',
 				title : 'appName'
 			}, {

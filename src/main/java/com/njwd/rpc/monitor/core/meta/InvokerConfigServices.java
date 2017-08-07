@@ -3,7 +3,9 @@ package com.njwd.rpc.monitor.core.meta;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.dubbo.common.Constants;
@@ -23,7 +25,8 @@ import com.njwd.rpc.monitor.core.util.Tool;
 @Service
 public class InvokerConfigServices implements ApplicationListener<InvokeMetaEvent>  {
 
-	
+	@Autowired  
+    private SimpMessageSendingOperations messageSendOper;  
 	 private static Table<String, String, List<Invoker>> data = HashBasedTable.create();
 	 private Object lock = new Object();
 	@Override
@@ -53,6 +56,7 @@ public class InvokerConfigServices implements ApplicationListener<InvokeMetaEven
 					remove(invoker, Constants.CONFIGURATORS_CATEGORY);
 				}
 			}
+			messageSendOper.convertAndSend("/topic/meta","C1");
 		}
 		
 		

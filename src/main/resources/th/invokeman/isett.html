@@ -66,9 +66,11 @@ $(function(){
 		refuse(_this.dataset.tid);
 	});
 	stompClient.subscribe("/topic/iset/provider",function(resp){
+		alalert.info("收到新的provider，执行刷新请求");
 		refuse('p_table');
     }); 
 	stompClient.subscribe("/topic/iset/consumer",function(resp){
+		alalert.info("收到新的consumer，执行刷新请求");
 		refuse('c_table');
     }); 
 	$('#p_table').bootstrapTable({});
@@ -87,7 +89,7 @@ $(function(){
 			data:{
 				appName:_row.appName,
 				serviceName:_row.serviceName,
-				group:_row.group,
+				group:_row.orignGroup,
 				port:_row.port,
 				ip:_row.ip
 			}
@@ -107,7 +109,7 @@ $(function(){
 			data:{
 				appName:_row.appName,
 				serviceName:_row.serviceName,
-				group:_row.group,
+				group:_row.orignGroup,
 				port:_row.port,
 				ip:_row.ip
 			}

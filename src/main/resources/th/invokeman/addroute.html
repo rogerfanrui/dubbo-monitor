@@ -1,0 +1,84 @@
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><li class="fa fa-remove"></li></button>
+	<h5 class="modal-title">新增用户</h5>
+</div>
+
+<div class="modal-body">
+
+	<form id="rule-form" name="rule-form" class="form-horizontal">
+		
+		<div class="box-body">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="servicesName" class="col-sm-3 control-label">服务名称</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="servicesName" name="servicesName" placeholder="服务名称">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="customerHostExpress" class="col-sm-3 control-label">消费者规则</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="customerHostExpress" name="customerHostExpress" placeholder="消费者规则">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="providerHostExpress" class="col-sm-3 control-label">提供者规则</label>
+
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="providerHostExpress" name="providerHostExpress" placeholder="提供者规则">
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
+		<!-- /.box-body -->
+		<div class="box-footer text-right">
+			<!--以下两种方式提交验证,根据所需选择-->
+			<button type="button" class="btn btn-default" data-btn-type="cancel" data-dismiss="modal">取消</button>
+			<button type="submit" class="btn btn-primary" data-btn-type="save">提交</button>
+		</div>
+		<!-- /.box-footer -->
+	</form>
+
+</div>
+<script>
+$(function() {
+	//初始化控件
+	form=$("#rule-form").form();
+	//数据校验
+	$("#rule-form").bootstrapValidator({
+		message : '请输入有效值',
+		feedbackIcons : {
+			valid : 'glyphicon glyphicon-ok',
+			invalid : 'glyphicon glyphicon-remove',
+			validating : 'glyphicon glyphicon-refresh'
+		},
+		submitHandler : function(validator, userform, submitButton) {
+			modals.confirm('确认保存？', function() {
+				//Save Data，对应'submit-提交'
+				var params = form.getFormSimpleData();
+				console.log(params);
+				doRequest({
+					url : context+'/meta/addRule',
+					type:'POST',
+					data:params
+				}, function(data) {
+					 modals.hideWin(winId); 
+				});
+			});
+		},
+		fields : {
+			servicesName : {
+				validators : {
+					notEmpty : {
+						message : '请输入服务名称'
+					}
+				}
+			}
+		}
+	});
+	form.initComponent();
+	
+});
+</script>

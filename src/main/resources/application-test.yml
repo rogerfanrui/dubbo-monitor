@@ -17,5 +17,13 @@ logging:
   config: classpath:logback.xml
   path: /logs/njwd
   level: INFO
+dubbo: 
+   registryAddress: zookeeper://192.168.31.151:2181
+   registryCheck: false
+   registryTimeout: 5000
+   applicationName: njwd-dubbo-monitor
+   annotationPackage: com.njwd.rpc.monitor.core.dubbo
+   protocolName: dubbo
+   protocolPort: 20881
 sweager : 
   enable: true

@@ -7,13 +7,12 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.portlet.ModelAndView;
 
 import com.njwd.rpc.monitor.core.alarm.AlarmRuleServices;
 import com.njwd.rpc.monitor.core.domain.alarm.AlarmRule;
@@ -31,8 +30,7 @@ public class AlarmRuleController {
 		return "alarm/index";
 	}
 	@RequestMapping("/addrule")
-	public ModelAndView addrule(@RequestParam(required=false) String id,ModelAndView view){
-		view.setViewName("alarm/addrule");
+	public String addrule(@RequestParam(required=false) String id,Model model){
 		AlarmRule rule = new AlarmRule();
 		if(id !=null){
 			List<AlarmRule> rules =this.alarmRuleServices.rules(id);
@@ -40,8 +38,8 @@ public class AlarmRuleController {
 				rule=rules.get(0);
 			}
 		}
-		view.addObject("rule",rule );
-		return view;
+		model.addAttribute("rule",rule );
+		return "alarm/addrule";
 	}
 	@RequestMapping(value="/loadRule",method=RequestMethod.GET)
 	@ResponseBody

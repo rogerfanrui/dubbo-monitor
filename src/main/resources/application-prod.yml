@@ -17,6 +17,8 @@ logging:
   config: classpath:logback.xml
   path: /logs/njwd
   level: INFO
+sweager : 
+  enable: true
 dubbo: 
    registryAddress: zookeeper://192.168.31.151:2181
    registryCheck: false
@@ -26,4 +28,4 @@ dubbo:
    protocolName: dubbo
    protocolPort: 20881
 sweager : 
-  enable: true
+  enable: false

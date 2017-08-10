@@ -1,0 +1,31 @@
+server:
+  port: 80
+spring: 
+  redis:
+    database: 5
+    host: xxx
+    port: 7000
+    password: xxx
+    max-active: 20
+    max-wait: 120000
+    max-idle: 20
+    min-idle: 2
+    timeout: 0
+  thymeleaf: 
+    cache: false
+logging:
+  config: classpath:logback.xml
+  path: /logs/njwd
+  level: INFO
+sweager : 
+  enable: true
+dubbo: 
+   registryAddress: zookeeper://xxx:2181
+   registryCheck: false
+   registryTimeout: 5000
+   applicationName: njwd-dubbo-monitor
+   annotationPackage: com.njwd.rpc.monitor.core.dubbo
+   protocolName: dubbo
+   protocolPort: 20881
+sweager : 
+  enable: false

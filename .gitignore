@@ -3,3 +3,8 @@
 .settings/
 target/
 /.apt_generated/
+src/main/resources/mgen/
+src/main/resources/app/application.yml
+src/main/resources/app/application-dev.yml
+src/main/resources/app/application-prod.yml
+src/main/resources/app/application-test.yml

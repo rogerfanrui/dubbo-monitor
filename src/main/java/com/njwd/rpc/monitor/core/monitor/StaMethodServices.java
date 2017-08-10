@@ -1,5 +1,6 @@
 package com.njwd.rpc.monitor.core.monitor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,14 +13,16 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.njwd.rpc.monitor.core.domain.StatisticsInfo;
+import com.njwd.rpc.monitor.core.monitor.clear.ClearRedisDatasHandlers;
 import com.njwd.rpc.monitor.core.monitor.domain.StaInvoker;
 import com.njwd.rpc.monitor.core.monitor.domain.StaMethod;
 import com.njwd.rpc.monitor.core.monitor.util.ScoreUtil;
 
 @Service
-public class StaMethodServices  {
+public class StaMethodServices  implements ClearRedisDatasHandlers{
 
 	private static int min=1;
 	private static int hour=2;
@@ -113,6 +116,22 @@ public class StaMethodServices  {
 	}
 	private String pre(StatisticsInfo info){
 		return info.isComsumer()?"com":"pro";
+	}
+
+
+	@Override
+	public List<String> minutesKeysPattern() {
+		List<String>  result = Lists.newLinkedList();
+		result.add("rec_method_com_min_*");
+		result.add("rec_method__pro_min_*");
+		return result;
+	}
+
+
+	@Override
+	public List<String> hoursKeysPattern() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

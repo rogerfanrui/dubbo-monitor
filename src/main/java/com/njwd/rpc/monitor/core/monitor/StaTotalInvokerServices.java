@@ -14,15 +14,17 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.njwd.rpc.monitor.config.SpringUtils;
 import com.njwd.rpc.monitor.core.alarm.AlarmEvent;
 import com.njwd.rpc.monitor.core.domain.StatisticsInfo;
+import com.njwd.rpc.monitor.core.monitor.clear.ClearRedisDatasHandlers;
 import com.njwd.rpc.monitor.core.monitor.domain.StaAll;
 import com.njwd.rpc.monitor.core.monitor.util.ScoreUtil;
 
 @Service
-public class StaTotalInvokerServices  {
+public class StaTotalInvokerServices   implements ClearRedisDatasHandlers{
 
 	private static int min=1;
 	private static int hour=2;
@@ -129,6 +131,21 @@ public class StaTotalInvokerServices  {
 	
 	private String key(String servicesName,int type){
 		return "rec_"+(type==1?"min":"hour")+"_"+servicesName;
+	}
+
+
+	@Override
+	public List<String> minutesKeysPattern() {
+		List<String>  result = Lists.newLinkedList();
+		result.add("rec_min_*");
+		return result;
+	}
+
+
+	@Override
+	public List<String> hoursKeysPattern() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

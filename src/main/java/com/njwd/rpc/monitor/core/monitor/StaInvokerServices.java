@@ -1,12 +1,10 @@
 package com.njwd.rpc.monitor.core.monitor;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Executor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -14,15 +12,15 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.njwd.rpc.monitor.config.SpringUtils;
-import com.njwd.rpc.monitor.core.alarm.AlarmEvent;
 import com.njwd.rpc.monitor.core.domain.StatisticsInfo;
+import com.njwd.rpc.monitor.core.monitor.clear.ClearRedisDatasHandlers;
 import com.njwd.rpc.monitor.core.monitor.domain.StaInvoker;
 import com.njwd.rpc.monitor.core.monitor.util.ScoreUtil;
 
 @Service
-public class StaInvokerServices  {
+public class StaInvokerServices implements ClearRedisDatasHandlers {
 
 	private static int min=1;
 	private static int hour=2;
@@ -121,6 +119,24 @@ public class StaInvokerServices  {
 	}
 	private String pre(StatisticsInfo info){
 		return info.isComsumer()?"com":"pro";
+	}
+
+
+
+
+	@Override
+	public List<String> minutesKeysPattern() {
+		List<String>  result = Lists.newLinkedList();
+		result.add("rec_com_min_*");
+		result.add("rec_pro_min_*");
+		return result;
+	}
+
+
+	@Override
+	public List<String> hoursKeysPattern() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

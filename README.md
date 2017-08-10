@@ -25,7 +25,7 @@
 优化了页面，使用局部加载方式加载Main-content
 
 ### mybatils generator
--  :fa-check: 新增自动生成services插件
+-    新增自动生成services插件
 
  **注意：**  因为其内部使用了mbg的protected继承，所以直接修改了源代码
 
@@ -37,7 +37,7 @@
 
 ```
 
-- :fa-check: 格式化mapper xml services生成包路径
+-   格式化mapper xml services生成包路径
 
  **注意：**  因为其内部使用了mbg的protected继承，所以直接修改了源代码
 
@@ -72,54 +72,54 @@ dubbo:
 - ~~可视化任务运行~~
 - ~~可视化任务监控~~
 
-###  :fa-circle-o: shiro spring boot集成，完成RBAC权限管理
-- :fa-circle-o: 与redis集成后支持session共享 
-- :fa-circle-o: 权限、角色的灵活分配.与数据库中的权限完成动态注册到shiro权限中
-- :fa-circle-o: 当客户端（有可能是后台接口）不支持cookie的情况下，支持token与session的关联
-- :fa-circle-o: shiro 的thyemleaf方言 
+###    shiro spring boot集成，完成RBAC权限管理
+-   与redis集成后支持session共享 
+-   权限、角色的灵活分配.与数据库中的权限完成动态注册到shiro权限中
+-   当客户端（有可能是后台接口）不支持cookie的情况下，支持token与session的关联
+-   shiro 的thyemleaf方言 
 
-### :fa-check: Swagger 集成
-:fa-check: 可以生成spring rest 接口调用平台和调用文档
+###   Swagger 集成
+  可以生成spring rest 接口调用平台和调用文档
 ## 实时的dubbo运行服务管理
 #### 配置管理  
 
-- :fa-check: 按照服务的维护查看当前服务的consumer、provider、config、route
--  :fa-minus-square: 服务的配置的精细化操作。 当熟悉dubbo元数据后可以通过后台的配置完成dubbo的精细化操作。比如 按条件路由、集群权重分配、集群负载均衡
+-   按照服务的维护查看当前服务的consumer、provider、config、route
+-    服务的配置的精细化操作。 当熟悉dubbo元数据后可以通过后台的配置完成dubbo的精细化操作。比如 按条件路由、集群权重分配、集群负载均衡
 
-    - :fa-check: 完成动态路由的新增和删除（2017-7-31）
+    -   完成动态路由的新增和删除（2017-7-31）
 
 #### 服务设置
-:fa-check: 按照comsumer provder的维度提供服务展示
+  按照comsumer provder的维度提供服务展示
 
 #### 调用关系
-:fa-check: 通过节点的形式查看节点与节点之间的调用关系生成的关系图
+  通过节点的形式查看节点与节点之间的调用关系生成的关系图
 
 
 ## 运行统计
 ### 全量运行统计   
-:fa-check: 以服务的维度查看当前维度的调用统计
+  以服务的维度查看当前维度的调用统计
 
-### :fa-minus-square:服务整体运行统计
-### :fa-minus-square:服务分comsumer provdier 运行统计
-- :fa-check: 后端处理
--  :fa-minus-square:按照以分钟的维度查看某一个服务comsuer/provider的服务统计
--  :fa-minus-square: 按照以小时的维度查看某一个服务comsuer/provider的服务统计
+###  服务整体运行统计
+###  服务分comsumer provdier 运行统计
+-   后端处理
+-   按照以分钟的维度查看某一个服务comsuer/provider的服务统计
+-    按照以小时的维度查看某一个服务comsuer/provider的服务统计
 
-### :fa-minus-square:服务方法运行统计
-- :fa-check: 后端处理
--  :fa-minus-square: 按照以分钟的维度查看某一个服务comsuer/provider 方法的服务统计
--  :fa-minus-square: 按照以小时的维度查看某一个服务comsuer/provider 方法的服务统计
+###  服务方法运行统计
+-   后端处理
+-    按照以分钟的维度查看某一个服务comsuer/provider 方法的服务统计
+-    按照以小时的维度查看某一个服务comsuer/provider 方法的服务统计
 
-##  :fa-minus-square: 监控管理
-####  :fa-check: 监控规则管理(2017-7-31)
-####  :fa-minus-square: 报警列表
-####  :fa-minus-square: 处理管理
+##    监控管理
+####    监控规则管理(2017-7-31)
+####    报警列表
+####    处理管理
 
 
-## :fa-minus-square: 系统设置
-### :fa-minus-square: 权限设置
-### :fa-minus-square: 用户设置
-### :fa-minus-square: 菜单设置
+##   系统设置
+###   权限设置
+###   用户设置
+###   菜单设置
 
 
 
